@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Register - Trading P&L Journal</title>
+
+  <link rel="stylesheet" href="../output.css">
+</head>
+
+<body class="min-h-screen bg-[#080808] text-white">
+
+  <div class="min-h-screen flex items-center justify-center px-6 py-12">
+
+    <div class="w-full max-w-md">
+
+      <!-- Brand -->
+      <div class="text-center mb-8">
+
+        <div class="inline-flex items-center gap-2 mb-4">
+
+          <div class="w-9 h-9 rounded-lg bg-orange-500 flex items-center justify-center">
+            <span class="font-black text-black">Y</span>
+          </div>
+
+          <span class="text-xl font-bold tracking-wide">
+            Your<span class="text-orange-500">Journal</span>
+          </span>
+
+        </div>
+
+        <p class="text-sm text-gray-500">
+          Trading P&L Journal
+        </p>
+
+      </div>
+
+
+      <!-- Register Card -->
+      <div class="bg-[#111111] border border-white/10 rounded-2xl p-8 shadow-2xl">
+
+        <div class="mb-8">
+
+          <h1 class="text-3xl font-bold mb-2">
+            Create account
+          </h1>
+
+          <p class="text-gray-400 text-sm">
+            Start tracking your trading performance.
+          </p>
+
+        </div>
+
+
+        <!-- Registration Form -->
+        <form>
+
+          <!-- Name -->
+          <div class="mb-5">
+
+            <label
+              for="name"
+              class="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Full name
+            </label>
+
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Enter your full name"
+              class="w-full px-4 py-3.5 bg-[#0a0a0a] border border-white/10 rounded-xl text-white placeholder-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+            >
+
+          </div>
+
+
+          <!-- Email -->
+          <div class="mb-5">
+
+            <label
+              for="email"
+              class="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Email address
+            </label>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              class="w-full px-4 py-3.5 bg-[#0a0a0a] border border-white/10 rounded-xl text-white placeholder-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+            >
+
+          </div>
+
+
+          <!-- Password -->
+          <div class="mb-6">
+
+            <label
+              for="password"
+              class="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Password
+            </label>
+
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Create a password"
+              class="w-full px-4 py-3.5 bg-[#0a0a0a] border border-white/10 rounded-xl text-white placeholder-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+            >
+
+          </div>
+
+
+          <!-- Register Button -->
+          <button
+            type="submit"
+            class="w-full py-3.5 bg-orange-500 hover:bg-orange-400 text-black font-bold rounded-xl transition duration-200"
+          >
+            Create account
+          </button>
+
+        </form>
+
+
+        <!-- Login -->
+        <div class="mt-7 pt-6 border-t border-white/10 text-center">
+
+          <p class="text-sm text-gray-500">
+
+            Already have an account?
+
+            <a
+              href="./login.html"
+              class="text-orange-500 hover:text-orange-400 font-medium"
+            >
+              Sign in
+            </a>
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- Footer -->
+      <p class="text-center text-xs text-gray-600 mt-6">
+        Track your trades. Understand your performance. Improve your process.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <script src="../js/register.js"></script>
+
+</body>
+</html>

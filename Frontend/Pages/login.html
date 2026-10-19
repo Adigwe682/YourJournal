@@ -1,0 +1,528 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login - MAZII TRADE</title>
+
+  <link rel="stylesheet" href="../output.css">
+
+  <style>
+    /* =========================
+       TRADING BACKGROUND
+    ========================== */
+
+    .trade-background {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .trade-card {
+      position: absolute;
+      width: 130px;
+      height: 105px;
+      padding: 16px;
+      border-radius: 16px;
+      box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.025);
+      backdrop-filter: blur(8px);
+    }
+
+    .trade-card .pair {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .trade-card .pnl {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 14px;
+    }
+
+    .profit {
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      background: rgba(34, 197, 94, 0.08);
+    }
+
+    .profit .pnl {
+      color: #4ade80;
+    }
+
+    .loss {
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    .loss .pnl {
+      color: #f87171;
+    }
+
+
+    /* Desktop positions */
+
+    .card-1 {
+      top: 12%;
+      left: 7%;
+      transform: rotate(-8deg);
+    }
+
+    .card-2 {
+      top: 20%;
+      right: 7%;
+      transform: rotate(7deg);
+    }
+
+    .card-3 {
+      bottom: 18%;
+      left: 8%;
+      transform: rotate(6deg);
+    }
+
+    .card-4 {
+      bottom: 15%;
+      right: 8%;
+      transform: rotate(-6deg);
+    }
+
+    .card-5 {
+      top: 48%;
+      left: 20%;
+      transform: rotate(4deg);
+    }
+
+    .card-6 {
+      top: 48%;
+      right: 20%;
+      transform: rotate(-4deg);
+    }
+
+
+    /* Hide middle cards on smaller screens */
+
+    @media (max-width: 900px) {
+
+      .card-5,
+      .card-6 {
+        display: none;
+      }
+
+    }
+
+
+    /* Mobile */
+
+    @media (max-width: 600px) {
+
+      .trade-card {
+        width: 105px;
+        height: 85px;
+        padding: 12px;
+      }
+
+      .trade-card .pnl {
+        font-size: 15px;
+        margin-top: 10px;
+      }
+
+      .trade-card .pair {
+        font-size: 10px;
+      }
+
+      .card-1 {
+        top: 7%;
+        left: -20px;
+      }
+
+      .card-2 {
+        top: 8%;
+        right: -20px;
+      }
+
+      .card-3 {
+        bottom: 7%;
+        left: -20px;
+      }
+
+      .card-4 {
+        bottom: 7%;
+        right: -20px;
+      }
+
+    }
+
+
+    /* =========================
+       LOGIN CONTENT
+    ========================== */
+
+    .login-content {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 448px;
+    }
+
+  </style>
+
+</head>
+
+
+<body class="min-h-screen bg-[#080808] text-white">
+
+
+  <!-- =========================
+       BACKGROUND TRADE CARDS
+  ========================== -->
+
+  <div class="trade-background">
+
+
+    <div class="trade-card profit card-1">
+
+      <div class="pair">
+        XAUUSD
+      </div>
+
+      <div class="pnl">
+        +$125.40
+      </div>
+
+    </div>
+
+
+    <div class="trade-card loss card-2">
+
+      <div class="pair">
+        EURUSD
+      </div>
+
+      <div class="pnl">
+        -$48.20
+      </div>
+
+    </div>
+
+
+    <div class="trade-card loss card-3">
+
+      <div class="pair">
+        GBPJPY
+      </div>
+
+      <div class="pnl">
+        -$31.70
+      </div>
+
+    </div>
+
+
+    <div class="trade-card profit card-4">
+
+      <div class="pair">
+        BTCUSD
+      </div>
+
+      <div class="pnl">
+        +$210.80
+      </div>
+
+    </div>
+
+
+    <div class="trade-card profit card-5">
+
+      <div class="pair">
+        ETHUSD
+      </div>
+
+      <div class="pnl">
+        +$87.60
+      </div>
+
+    </div>
+
+
+    <div class="trade-card loss card-6">
+
+      <div class="pair">
+        US30
+      </div>
+
+      <div class="pnl">
+        -$62.40
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================
+       LOGIN
+  ========================== -->
+
+  <main class="login-content">
+
+    <div class="login-wrapper">
+
+
+      <!-- Brand -->
+
+      <a  href="../index.html">
+        <div class="text-center mb-7">
+
+        <div class="inline-flex items-center gap-2 mb-3">
+
+          <div class="w-9 h-9 rounded-lg bg-orange-500 flex items-center justify-center">
+
+            <span class="font-black text-black">
+              Y
+            </span>
+
+          </div>
+
+
+          <span class="text-xl font-bold tracking-wide">
+
+            Your<span class="text-orange-500">
+              Journal
+            </span>
+
+          </span>
+
+        </div>
+
+
+        <p class="text-sm text-gray-500">
+          Trading P&L Journal
+        </p>
+
+      </div>  
+      </a> 
+
+
+
+      <!-- Login Card -->
+
+      <div class="bg-[#111111] border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl">
+
+
+        <div class="mb-7">
+
+          <h1 class="text-2xl sm:text-3xl font-bold mb-2">
+            Welcome back
+          </h1>
+
+
+          <p class="text-gray-400 text-sm leading-6">
+            Sign in to manage and track your trading performance.
+          </p>
+
+        </div>
+
+
+
+        <!-- Form -->
+
+        <form>
+
+
+          <!-- Email -->
+
+          <div class="mb-5">
+
+            <label
+              for="email"
+              class="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Email address
+            </label>
+
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              required
+              class="w-full px-4 py-3.5 bg-[#0a0a0a] border border-white/10 rounded-xl text-white placeholder-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+            >
+
+          </div>
+
+
+
+          <!-- Password -->
+
+          <div class="mb-4">
+
+
+            <div class="flex items-center justify-between mb-2">
+
+              <label
+                for="password"
+                class="text-sm font-medium text-gray-300"
+              >
+                Password
+              </label>
+
+
+              <a
+                href="./forgot-password.html"
+                class="text-xs text-orange-500 hover:text-orange-400"
+              >
+                Forgot password?
+              </a>
+
+            </div>
+
+
+
+            <div class="relative">
+
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                required
+                class="w-full px-4 py-3.5 pr-12 bg-[#0a0a0a] border border-white/10 rounded-xl text-white placeholder-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+              >
+
+
+              <button
+                type="button"
+                id="togglePassword"
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition"
+              >
+                👁
+              </button>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- Remember -->
+
+          <div class="flex items-center gap-2 mb-7">
+
+            <input
+              id="remember"
+              type="checkbox"
+              class="w-4 h-4 accent-orange-500"
+            >
+
+
+            <label
+              for="remember"
+              class="text-sm text-gray-400"
+            >
+              Remember me
+            </label>
+
+          </div>
+
+
+
+          <!-- Button -->
+
+          <button
+            type="submit"
+            class="w-full py-3.5 bg-orange-500 hover:bg-orange-400 text-black font-bold rounded-xl transition duration-200"
+          >
+            Sign in
+          </button>
+
+        </form>
+
+
+
+        <!-- Register -->
+
+        <div class="mt-7 pt-6 border-t border-white/10 text-center">
+
+          <p class="text-sm text-gray-500">
+
+            Don't have an account?
+
+            <a
+              href="./register.html"
+              class="text-orange-500 hover:text-orange-400 font-medium"
+            >
+              Create one
+            </a>
+
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- Footer -->
+
+      <p class="text-center text-xs text-gray-600 mt-5 px-4">
+        Track your trades. Understand your performance. Improve your process.
+      </p>
+
+
+    </div>
+
+  </main>
+
+
+
+  <!-- Password Toggle -->
+
+  <script>
+
+    const passwordInput = document.querySelector("#password");
+    const togglePassword = document.querySelector("#togglePassword");
+
+    togglePassword.addEventListener("click", () => {
+
+      if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+        togglePassword.textContent = "🙈";
+
+      } else {
+
+        passwordInput.type = "password";
+        togglePassword.textContent = "👁";
+
+      }
+
+    });
+
+  </script>
+
+
+  <!-- Login JS -->
+
+  <script src="../js/login.js"></script>
+
+
+</body>
+
+</html>
+

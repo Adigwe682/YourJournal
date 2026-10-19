@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <title>Dashboard - MAZII TRADE</title>
+  <link rel="stylesheet" href="../output.css">
+
+  <style>
+    html {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: clip;
+    }
+
+    body {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      margin: 0;
+      overflow-x: clip;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    main,
+    header,
+    section,
+    #tradeList,
+    #bestPairsList {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    #tradeList>*,
+    #bestPairsList>* {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    input,
+    button,
+    a {
+      max-width: 100%;
+    }
+
+    input[type="month"] {
+      width: 100%;
+      min-width: 0;
+    }
+
+    #shareReportLink {
+      width: 100%;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 639px) {
+      .dashboard-header-inner {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        gap: 0.75rem;
+      }
+
+      .dashboard-main {
+        padding: 1.25rem 1rem;
+      }
+
+      .dashboard-panel {
+        padding: 1rem;
+      }
+
+      .dashboard-heading-row {
+        align-items: flex-start;
+      }
+
+      #tradeList {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      #bestPairsList {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      #monthlyPnl {
+        font-size: clamp(1.75rem, 8vw, 2.25rem);
+        overflow-wrap: anywhere;
+      }
+
+      #shareReportLink {
+        font-size: 0.75rem;
+      }
+
+      #copyReportLinkButton {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-[#080808] text-white">
+
+  <!-- Header -->
+
+  <header class="border-b border-white/10 bg-[#0b0b0b]">
+    <div class="dashboard-header-inner max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
+
+      <!-- Brand -->
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 shrink-0 rounded-lg bg-orange-500 flex items-center justify-center">
+          <span class="font-black text-black">Y</span>
+        </div>
+
+        <div class="min-w-0">
+          <h1 class="font-bold tracking-wide whitespace-nowrap">
+            Your<span class="text-orange-500">Journal</span>
+          </h1>
+          <p class="text-xs text-gray-500 whitespace-nowrap">
+            Trading P&amp;L Journal
+          </p>
+        </div>
+      </div>
+
+      <!-- User and Logout -->
+      <div class="flex items-center gap-3 sm:gap-5 shrink-0">
+
+        <!-- Avatar + name -->
+        <div class="flex items-center gap-3">
+          <div id="userAvatar"
+            class="w-10 h-10 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-500 font-bold flex items-center justify-center">
+            U
+          </div>
+
+          <div class="hidden sm:block leading-tight">
+            <h2 id="userName" class="text-sm font-semibold text-white"></h2>
+            <p class="text-xs text-gray-500 mt-0.5">Trader</p>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="hidden sm:block h-8 w-px bg-white/10"></div>
+
+        <!-- Logout -->
+        <button id="logoutButton"
+          class="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-semibold whitespace-nowrap rounded-full border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500 hover:border-red-500 hover:text-white transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span class="hidden sm:inline">Logout</span>
+        </button>
+
+      </div>
+
+    </div>
+  </header>
+
+
+
+  <main class="dashboard-main w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- Page heading and month filter -->
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-bold">Trading Overview</h2>
+        <p class="text-gray-500 text-sm mt-1">Monitor your trading performance.</p>
+      </div>
+
+      <div class="w-44 shrink-0">
+        <label for="month" class="block text-xs text-gray-500 mb-2">Select month</label>
+        <input id="month" type="month" value="2026-09"
+          class="block w-full bg-[#111111] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-orange-500 [color-scheme:dark]">
+      </div>
+    </div>
+    <!-- Monthly Statistics -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-8">
+
+      <div class="bg-[#111111] border border-white/10 rounded-2xl p-5 min-w-0">
+        <p class="text-sm text-gray-500">Total Trades</p>
+        <h3 id="totalTrades" class="text-3xl font-bold mt-2">0</h3>
+        <p class="text-xs text-gray-600 mt-2">This month</p>
+      </div>
+
+      <div class="bg-[#111111] border border-white/10 rounded-2xl p-5 min-w-0">
+        <p class="text-sm text-gray-500">Wins</p>
+        <h3 id="totalWins" class="text-3xl font-bold text-green-500 mt-2">0</h3>
+        <p class="text-xs text-gray-600 mt-2">Profitable trades</p>
+      </div>
+
+      <div class="bg-[#111111] border border-white/10 rounded-2xl p-5 min-w-0">
+        <p class="text-sm text-gray-500">Losses</p>
+        <h3 id="totalLosses" class="text-3xl font-bold text-red-500 mt-2">0</h3>
+        <p class="text-xs text-gray-600 mt-2">Losing trades</p>
+      </div>
+
+      <div class="bg-[#111111] border border-white/10 rounded-2xl p-5 min-w-0">
+        <p class="text-sm text-gray-500">Win Rate</p>
+        <h3 id="winRate" class="text-3xl font-bold text-orange-500 mt-2">0%</h3>
+        <p class="text-xs text-gray-600 mt-2">This month</p>
+      </div>
+
+    </div>
+
+    <!-- Monthly P&L and Manage Trades -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mt-4">
+
+      <div class="lg:col-span-2 bg-[#111111] border border-white/10 rounded-2xl p-5 sm:p-6 min-w-0">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div class="min-w-0">
+            <p class="text-sm text-gray-500">Monthly P&amp;L</p>
+            <h3 id="monthlyPnl" class="text-4xl font-bold text-green-500 mt-2">+$0.00</h3>
+          </div>
+
+          <div class="sm:text-right min-w-0">
+            <p id="pnlMonth" class="text-xs text-gray-600">September 2026</p>
+            <p class="text-sm text-gray-400 mt-1">Net performance</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-[#111111] border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col justify-between min-w-0">
+        <div>
+          <p class="text-sm text-gray-500">Manage Trades</p>
+          <h3 class="text-xl font-semibold mt-2">Record a new trade</h3>
+        </div>
+
+        <a href="./add-trade.html"
+          class="block w-full mt-6 py-3 px-4 bg-orange-500 hover:bg-orange-400 text-black font-bold rounded-xl transition text-center">
+          + Add Trade
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Share Monthly Report -->
+    <section
+      class="dashboard-panel relative overflow-hidden mt-4 bg-[#111111] border border-white/10 rounded-2xl p-5 sm:p-6 min-w-0">
+
+      <!-- Soft orange glow in the corner -->
+      <div class="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-orange-500/10 blur-3xl">
+      </div>
+
+      <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 min-w-0">
+
+        <!-- Icon + text -->
+        <div class="flex items-start gap-4 min-w-0">
+          <div
+            class="shrink-0 w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-500 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+          </div>
+
+          <div class="min-w-0">
+            <p class="text-xs font-semibold uppercase tracking-wider text-orange-500">Share your progress</p>
+            <h3 class="text-xl font-semibold mt-1">Monthly Trading Report</h3>
+            <p class="text-sm text-gray-500 mt-2 max-w-md">
+              Generate a link to share your selected month's trading summary.
+            </p>
+          </div>
+        </div>
+
+        <!-- Generate button -->
+        <button id="shareReportButton"
+          class="group w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 bg-orange-500 hover:bg-orange-400 active:scale-[0.98] text-black font-bold rounded-xl shadow-lg shadow-orange-500/20 transition disabled:opacity-60 disabled:cursor-not-allowed">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+          </svg>
+          Generate Share Link
+        </button>
+      </div>
+
+      <!-- Status message -->
+      <p id="shareReportStatus" class="relative text-sm text-gray-400 mt-4 break-words empty:hidden" aria-live="polite">
+      </p>
+
+      <!-- Result -->
+      <div id="shareReportResult" class="hidden relative mt-5 pt-5 border-t border-white/10 min-w-0">
+        <label for="shareReportLink" class="block text-xs font-medium text-gray-500 mb-2">
+          Your shareable report link
+        </label>
+
+        <div class="flex flex-col sm:flex-row gap-3 min-w-0">
+
+          <!-- Input with link icon -->
+          <div class="relative flex-1 min-w-0">
+            <svg xmlns="http://www.w3.org/2000/svg"
+              class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>
+
+            <input id="shareReportLink" type="text" readonly
+              class="block w-full min-w-0 bg-[#080808] border border-white/10 focus:border-orange-500 outline-none rounded-lg pl-9 pr-3 py-3 text-sm text-gray-300 truncate">
+          </div>
+
+          <!-- Copy button -->
+          <button id="copyReportLinkButton"
+            class="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 border border-white/10 bg-white/5 hover:border-orange-500 hover:text-orange-400 active:scale-[0.98] rounded-lg text-sm font-semibold transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            <span id="copyReportLinkLabel">Copy Link</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Best Performing Pairs -->
+    <section class="dashboard-panel mt-6 sm:mt-8 bg-[#111111] border border-white/10 rounded-2xl p-5 sm:p-6 min-w-0">
+
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 min-w-0">
+        <div class="min-w-0">
+          <p class="text-sm text-gray-500">Best Performing Pairs</p>
+          <h3 class="text-xl font-semibold mt-1">Top 5 winning pairs</h3>
+          <p class="text-xs text-gray-500 mt-1">Ranked by winning trades this month</p>
+        </div>
+
+        <span id="bestPairsMonth" class="text-xs text-gray-500 sm:text-right shrink-0">
+          September 2026
+        </span>
+      </div>
+
+      <div id="bestPairsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mt-5 min-w-0">
+        <p class="text-sm text-gray-500 col-span-full">
+          Your best performing pairs will appear here.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- Trade History -->
+    <section class="mt-6 sm:mt-8 min-w-0">
+
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4 min-w-0">
+        <div class="min-w-0">
+          <h2 class="text-xl font-bold">Trade History</h2>
+          <p class="text-sm text-gray-500 mt-1">Your trades for the selected month.</p>
+        </div>
+
+        <span id="historyMonth" class="text-xs text-gray-500 sm:text-right">
+          September 2026
+        </span>
+      </div>
+
+      <div id="tradeList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3 w-full min-w-0">
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="../js/app.js"></script>
+
+  <script>
+    const shareButton = document.querySelector("#shareReportButton");
+    const shareStatus = document.querySelector("#shareReportStatus");
+    const shareResult = document.querySelector("#shareReportResult");
+    const shareLinkInput = document.querySelector("#shareReportLink");
+    const copyLinkButton = document.querySelector("#copyReportLinkButton");
+    const reportMonthInput = document.querySelector("#month");
+
+    shareButton.addEventListener("click", async () => {
+      const token = localStorage.getItem("token");
+      const month = reportMonthInput.value;
+
+      if (!token) {
+        window.location.href = "./login.html";
+        return;
+      }
+
+      if (!month) {
+        shareStatus.textContent = "Please select a month first.";
+        return;
+      }
+
+      shareButton.disabled = true;
+      shareButton.textContent = "Generating...";
+      shareStatus.textContent = "";
+      shareResult.classList.add("hidden");
+
+      try {
+        const response = await fetch("http://localhost:4000/api/reports/share", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ month }),
+        });
+
+        const data = await response.json();
+
+        if (response.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          window.location.href = "./login.html";
+          return;
+        }
+
+        if (!response.ok || !data.success || !data.data.shareToken) {
+          throw new Error(data.message || "Could not create share link.");
+        }
+
+        const shareUrl = new URL(
+          `/Frontend/Pages/shared-report.html?token=${encodeURIComponent(data.data.shareToken)}`,
+          window.location.origin
+        ).href;
+
+        shareLinkInput.value = shareUrl;
+        shareResult.classList.remove("hidden");
+        shareStatus.textContent =
+          "Share link generated. Anyone with this link can view the report.";
+      } catch (error) {
+        shareStatus.textContent =
+          error.message || "Could not generate the report link.";
+      } finally {
+        shareButton.disabled = false;
+        shareButton.textContent = "Generate Share Link";
+      }
+    });
+
+    copyLinkButton.addEventListener("click", async () => {
+      const link = shareLinkInput.value;
+
+      if (!link) return;
+
+      try {
+        await navigator.clipboard.writeText(link);
+        shareStatus.textContent = "Link copied successfully.";
+      } catch {
+        shareLinkInput.focus();
+        shareLinkInput.select();
+        shareStatus.textContent = "Select the link and copy it manually.";
+      }
+    });
+  </script>
+
+</body>
+
+</html>

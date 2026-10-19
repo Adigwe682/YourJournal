@@ -1,0 +1,806 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0807" />
+    <title>Monthly Trading Report | MAZII TRADE</title>
+
+    <link rel="stylesheet" href="../output.css" />
+
+    <style>
+        :root {
+            --bg: #0a0807;
+            --panel: #12100e;
+            --border: #2a241f;
+            --orange: #ff7628;
+            --text: #f5f1ed;
+            --muted: #92877e;
+            --green: #39d98a;
+            --red: #ff626b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            width: 100%;
+            max-width: 100%;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            background:
+                radial-gradient(ellipse at 50% -15%, #48200e 0%, transparent 42%),
+                var(--bg);
+            color: var(--text);
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .page {
+            width: calc(100% - 32px);
+            max-width: 1000px;
+            min-width: 0;
+            margin: 0 auto;
+            padding: 28px 0 44px;
+        }
+
+        .topbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 26px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-width: 0;
+        }
+
+        .brand-mark {
+            display: grid;
+            flex: 0 0 42px;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--orange);
+            color: #160b05;
+            font-size: 19px;
+            font-weight: 900;
+        }
+
+        .brand-name {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 850;
+            letter-spacing: 1.5px;
+        }
+
+        .brand-subtitle {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .public-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            max-width: 100%;
+            padding: 8px 11px;
+            border: 1px solid #3a3028;
+            border-radius: 999px;
+            color: #d2c4b8;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .public-dot {
+            flex: 0 0 7px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        .intro {
+            padding: 42px 0 26px;
+        }
+
+        .eyebrow {
+            margin: 0 0 12px;
+            color: var(--orange);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(30px, 5vw, 46px);
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+        }
+
+        .intro-text {
+            max-width: 540px;
+            margin: 14px 0 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .report-period {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 9px;
+            max-width: 100%;
+            margin-top: 22px;
+            padding: 10px 13px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #110e0c;
+            color: #e8ddd4;
+            font-size: 12px;
+        }
+
+        .period-dot {
+            color: var(--orange);
+        }
+
+        .section-heading {
+            margin: 30px 0 15px;
+            font-size: 13px;
+            font-weight: 750;
+            letter-spacing: 0.2px;
+        }
+
+        .hero-card {
+            position: relative;
+            min-width: 0;
+            max-width: 100%;
+            overflow: hidden;
+            padding: 28px;
+            border: 1px solid #57301e;
+            border-radius: 18px;
+            background:
+                radial-gradient(ellipse at 100% 0%, #48200f 0%, transparent 45%),
+                linear-gradient(135deg, #1b1511, #100d0b 70%);
+        }
+
+        .hero-card::after {
+            position: absolute;
+            top: -55px;
+            right: -35px;
+            width: 180px;
+            height: 180px;
+            border: 1px solid #ffffff0b;
+            border-radius: 50%;
+            content: "";
+            pointer-events: none;
+        }
+
+        .metric-label {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .pnl-value {
+            margin: 13px 0 12px;
+            font-size: clamp(30px, 7vw, 53px);
+            font-weight: 850;
+            letter-spacing: -1.5px;
+            overflow-wrap: anywhere;
+        }
+
+        .pnl-value.positive {
+            color: var(--green);
+        }
+
+        .pnl-value.negative {
+            color: var(--red);
+        }
+
+        .pnl-value.neutral {
+            color: var(--text);
+        }
+
+        .pnl-caption {
+            margin: 0;
+            color: #b3a69b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 13px;
+            min-width: 0;
+            margin-top: 14px;
+        }
+
+        .stat-card {
+            min-width: 0;
+            padding: 20px 17px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: var(--panel);
+        }
+
+        .stat-value {
+            margin: 13px 0 0;
+            font-size: clamp(22px, 3vw, 30px);
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            overflow-wrap: anywhere;
+        }
+
+        .stat-note {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .win-value {
+            color: var(--green);
+        }
+
+        .loss-value {
+            color: var(--red);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .detail-card {
+            min-width: 0;
+            padding: 22px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--panel);
+        }
+
+        .detail-title {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 750;
+        }
+
+        .detail-description {
+            margin: 7px 0 20px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .progress-track {
+            height: 7px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #302721;
+        }
+
+        .progress-fill {
+            width: 0;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #ff7628, #ffad59);
+            transition: width 400ms ease;
+        }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .pair-list {
+            display: grid;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .pair-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid #2c241f;
+            border-radius: 9px;
+            background: #171310;
+        }
+
+        .pair-name {
+            min-width: 0;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            overflow-wrap: anywhere;
+        }
+
+        .pair-wins {
+            flex-shrink: 0;
+            color: var(--green);
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .empty-pairs {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .loading-card,
+        .error-card {
+            max-width: 100%;
+            padding: 26px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--panel);
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .loading-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 9px;
+            border-radius: 50%;
+            background: var(--orange);
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.35; }
+            to { opacity: 1; }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .footer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            min-width: 0;
+            margin-top: 38px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .footer strong {
+            color: #d7c9be;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 720px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .detail-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @media (max-width: 420px) {
+            .page {
+                width: calc(100% - 24px);
+                padding-top: 18px;
+            }
+
+            .topbar {
+                align-items: center;
+            }
+
+            .brand {
+                gap: 8px;
+            }
+
+            .brand-name {
+                font-size: 13px;
+                letter-spacing: 1px;
+            }
+
+            .brand-subtitle {
+                font-size: 10px;
+                letter-spacing: 0.6px;
+            }
+
+            .public-label {
+                padding: 7px 8px;
+                font-size: 10px;
+            }
+
+            .intro {
+                padding-top: 32px;
+            }
+
+            .hero-card {
+                padding: 23px 19px;
+            }
+
+            .stat-card {
+                padding: 17px 13px;
+            }
+
+            .detail-card {
+                padding: 18px;
+            }
+
+            .footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">M</div>
+                <div>
+                    <p class="brand-name">MAZII TRADE</p>
+                    <p class="brand-subtitle">TRADING PERFORMANCE</p>
+                </div>
+            </div>
+
+            <div class="public-label">
+                <span class="public-dot"></span>
+                Shared report
+            </div>
+        </header>
+
+        <section class="intro">
+            <p class="eyebrow">Performance overview</p>
+            <h1>Monthly trading<br />report.</h1>
+            <p class="intro-text">
+                A clear breakdown of trading activity, results, and winning pairs
+                for the selected month.
+            </p>
+
+            <div class="report-period">
+                <span class="period-dot">●</span>
+                <span id="reportMonth">Monthly report</span>
+            </div>
+        </section>
+
+        <section id="loadingMessage" class="loading-card">
+            <span class="loading-dot"></span>
+            Loading your trading report...
+        </section>
+
+        <section id="errorMessage" class="error-card hidden" role="alert">
+            <strong>Report unavailable</strong>
+            <p id="errorText">
+                This report could not be loaded. Please check the link and try again.
+            </p>
+        </section>
+
+        <section id="reportContent" class="hidden">
+            <h2 class="section-heading">Your monthly result</h2>
+
+            <div class="hero-card">
+                <p class="metric-label">Net profit / loss</p>
+                <p id="totalPnl" class="pnl-value neutral">$0.00</p>
+                <p id="pnlCaption" class="pnl-caption">
+                    Your combined result for this reporting period.
+                </p>
+            </div>
+
+            <h2 class="section-heading">Performance breakdown</h2>
+
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <p class="metric-label">Total trades</p>
+                    <p id="totalTrades" class="stat-value">0</p>
+                    <p class="stat-note">Trades recorded</p>
+                </article>
+
+                <article class="stat-card">
+                    <p class="metric-label">Winning trades</p>
+                    <p id="wins" class="stat-value win-value">0</p>
+                    <p class="stat-note">Profitable outcomes</p>
+                </article>
+
+                <article class="stat-card">
+                    <p class="metric-label">Losing trades</p>
+                    <p id="losses" class="stat-value loss-value">0</p>
+                    <p class="stat-note">Loss outcomes</p>
+                </article>
+
+                <article class="stat-card">
+                    <p class="metric-label">Win rate</p>
+                    <p id="winRate" class="stat-value">0%</p>
+                    <p class="stat-note">Wins as a share of trades</p>
+                </article>
+            </div>
+
+            <h2 class="section-heading">More insights</h2>
+
+            <div class="detail-grid">
+                <article class="detail-card">
+                    <h3 class="detail-title">Win rate progress</h3>
+                    <p class="detail-description">
+                        The proportion of recorded trades that closed as wins.
+                    </p>
+
+                    <div id="winProgress"
+                         class="progress-track"
+                         role="progressbar"
+                         aria-label="Win rate"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         aria-valuenow="0">
+                        <div id="winProgressFill" class="progress-fill"></div>
+                    </div>
+
+                    <div class="progress-meta">
+                        <span id="progressCaption">0% wins</span>
+                        <span id="progressRate">0%</span>
+                    </div>
+                </article>
+
+                <article class="detail-card">
+                    <h3 class="detail-title">Best-performing pairs</h3>
+                    <p class="detail-description">
+                        Pairs ranked by recorded winning trades.
+                    </p>
+
+                    <div id="bestPairs" class="pair-list">
+                        <p class="empty-pairs">Loading pair performance...</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div>
+                <strong>MAZII TRADE</strong>
+                <div>Trade with a plan. Review every result.</div>
+            </div>
+            <div>Shared trading statistics</div>
+        </footer>
+    </main>
+
+    <script>
+        const loadingMessage = document.getElementById("loadingMessage");
+        const errorMessage = document.getElementById("errorMessage");
+        const errorText = document.getElementById("errorText");
+        const reportContent = document.getElementById("reportContent");
+
+        function showError(message) {
+            loadingMessage.classList.add("hidden");
+            reportContent.classList.add("hidden");
+            errorMessage.classList.remove("hidden");
+            errorText.textContent = message;
+        }
+
+        function formatMonth(month) {
+            const match = /^(\d{4})-(\d{2})$/.exec(month || "");
+
+            if (!match) return month || "Monthly report";
+
+            const date = new Date(
+                Number(match[1]),
+                Number(match[2]) - 1,
+                1
+            );
+
+            return date.toLocaleDateString("en", {
+                month: "long",
+                year: "numeric"
+            });
+        }
+
+        function formatPnl(value) {
+            const amount = Number(value);
+
+            if (!Number.isFinite(amount)) return "$0.00";
+
+            const sign = amount > 0 ? "+" : amount < 0 ? "−" : "";
+
+            return sign + "$" + Math.abs(amount).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function displayNumber(value) {
+            const number = Number(value);
+
+            return Number.isFinite(number)
+                ? number.toLocaleString("en-US")
+                : "0";
+        }
+
+        function renderBestPairs(pairs) {
+            const container = document.getElementById("bestPairs");
+            container.replaceChildren();
+
+            if (!Array.isArray(pairs) || pairs.length === 0) {
+                const empty = document.createElement("p");
+                empty.className = "empty-pairs";
+                empty.textContent = "No winning pairs recorded for this month.";
+                container.appendChild(empty);
+                return;
+            }
+
+            pairs.forEach((pair) => {
+                const row = document.createElement("div");
+                row.className = "pair-row";
+
+                const name = document.createElement("span");
+                name.className = "pair-name";
+                name.textContent = pair.pair || "Unknown pair";
+
+                const wins = document.createElement("span");
+                wins.className = "pair-wins";
+                wins.textContent = `${displayNumber(pair.wins)} wins`;
+
+                row.append(name, wins);
+                container.appendChild(row);
+            });
+        }
+
+        async function loadSharedReport() {
+            const params = new URLSearchParams(window.location.search);
+            const token = params.get("token");
+
+            if (!token) {
+                showError(
+                    "No report token was provided. Open the complete share link generated from your dashboard."
+                );
+                return;
+            }
+
+            loadingMessage.classList.remove("hidden");
+            errorMessage.classList.add("hidden");
+            reportContent.classList.add("hidden");
+
+            try {
+                const response = await fetch(
+                    `http://localhost:4000/api/reports/shared/${encodeURIComponent(token)}`
+                );
+
+                let result;
+
+                try {
+                    result = await response.json();
+                } catch {
+                    throw new Error("The server returned an unreadable response.");
+                }
+
+                if (!response.ok || !result.success || !result.data) {
+                    throw new Error(
+                        result.message || "This report could not be found."
+                    );
+                }
+
+                const report = result.data;
+                const pnl = Number(report.totalPnl) || 0;
+                const winRate = Math.max(
+                    0,
+                    Math.min(100, Number(report.winRate) || 0)
+                );
+
+                document.getElementById("reportMonth").textContent =
+                    formatMonth(report.month);
+
+                const pnlElement = document.getElementById("totalPnl");
+
+                pnlElement.textContent = formatPnl(pnl);
+                pnlElement.classList.remove(
+                    "positive",
+                    "negative",
+                    "neutral"
+                );
+                pnlElement.classList.add(
+                    pnl > 0 ? "positive" : pnl < 0 ? "negative" : "neutral"
+                );
+
+                document.getElementById("pnlCaption").textContent =
+                    pnl > 0
+                        ? "A positive result for this reporting period."
+                        : pnl < 0
+                            ? "A negative result for this reporting period."
+                            : "Break-even result for this reporting period.";
+
+                document.getElementById("totalTrades").textContent =
+                    displayNumber(report.totalTrades);
+
+                document.getElementById("wins").textContent =
+                    displayNumber(report.wins);
+
+                document.getElementById("losses").textContent =
+                    displayNumber(report.losses);
+
+                document.getElementById("winRate").textContent =
+                    `${winRate.toFixed(1)}%`;
+
+                document.getElementById("progressRate").textContent =
+                    `${winRate.toFixed(1)}%`;
+
+                document.getElementById("progressCaption").textContent =
+                    `${winRate.toFixed(1)}% wins`;
+
+                document.getElementById("winProgress").setAttribute(
+                    "aria-valuenow",
+                    String(winRate)
+                );
+
+                document.getElementById("winProgressFill").style.width =
+                    `${winRate}%`;
+
+                renderBestPairs(report.bestPairs);
+
+                loadingMessage.classList.add("hidden");
+                errorMessage.classList.add("hidden");
+                reportContent.classList.remove("hidden");
+            } catch (error) {
+                console.error("Shared report error:", error);
+
+                showError(
+                    error.message ||
+                    "Unable to load the shared report. Please try again."
+                );
+            }
+        }
+
+        loadSharedReport();
+    </script>
+</body>
+</html>

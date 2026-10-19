@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Add Trade - Trading P&L Journal</title>
+
+  <link rel="stylesheet" href="../output.css">
+</head>
+
+<body class="bg-[#080808] text-white">
+    <header class="border-b border-white/10 bg-[#0b0b0b]">
+
+  <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <div>
+      <h1 class="font-bold tracking-wide">
+        MAZII<span class="text-orange-500">TRADE</span>
+      </h1>
+
+      <p class="text-xs text-gray-500">
+        Record Trade
+      </p>
+    </div>
+
+    <a
+      href="./dashboard.html"
+      class="text-sm text-gray-400 hover:text-white transition"
+    >
+      ← Back to Dashboard
+    </a>
+
+  </div>
+
+</header>
+<main class="max-w-4xl mx-auto px-6 py-10">
+
+  <div class="mb-8">
+    <h2 class="text-2xl font-bold">
+      Add New Trade
+    </h2>
+
+    <p class="text-sm text-gray-500 mt-1">
+      Record your trade and keep your performance history organized.
+    </p>
+  </div>
+
+  <form class="bg-[#111111] border border-white/10 rounded-2xl p-6">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+  <!-- Pair -->
+  <div>
+    <label
+      for="pair"
+      class="block text-sm text-gray-400 mb-2"
+    >
+      Trading Pair
+    </label>
+
+    <input
+      id="pair"
+      name="pair"
+      type="text"
+      placeholder="e.g. XAUUSD"
+      class="w-full bg-[#0b0b0b] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none focus:border-orange-500 transition"
+    >
+  </div>
+
+  <!-- Date -->
+  <div>
+    <label
+      for="date"
+      class="block text-sm text-gray-400 mb-2"
+    >
+      Trade Date
+    </label>
+
+    <input
+      id="date"
+      name="date"
+      type="date"
+      class="w-full bg-[#0b0b0b] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-orange-500 transition"
+    >
+  </div>
+
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
+
+  <!-- RR -->
+  <div>
+    <label
+      for="rr"
+      class="block text-sm text-gray-400 mb-2"
+    >
+      Risk / Reward
+    </label>
+
+    <input
+      id="rr"
+      name="rr"
+      type="number"
+      step="0.1"
+      placeholder="e.g. 5"
+      class="w-full bg-[#0b0b0b] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none focus:border-orange-500 transition"
+    >
+  </div>
+
+  <!-- P&L -->
+  <div>
+    <label
+      for="pnl"
+      class="block text-sm text-gray-400 mb-2"
+    >
+      P&L
+    </label>
+
+    <input
+      id="pnl"
+      name="pnl"
+      type="number"
+      step="0.01"
+      placeholder="e.g. 100"
+      class="w-full bg-[#0b0b0b] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none focus:border-orange-500 transition"
+    >
+  </div>
+
+</div>
+<div class="mt-5">
+
+  <label
+    for="result"
+    class="block text-sm text-gray-400 mb-2"
+  >
+    Trade Result
+  </label>
+
+  <select
+    id="result"
+    name="result"
+    class="w-full bg-[#0b0b0b] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-orange-500 transition"
+  >
+    <option value="" disabled selected>
+      Select result
+    </option>
+
+    <option value="profit">
+      Profit
+    </option>
+
+    <option value="loss">
+      Loss
+    </option>
+
+    <option value="breakeven">
+      Breakeven
+    </option>
+
+  </select>
+
+</div>
+<div class="mt-8 flex items-center justify-end gap-3">
+
+  <a
+    href="./dashboard.html"
+    class="px-5 py-3 rounded-xl border border-white/10 text-gray-400 hover:text-white hover:border-white/20 transition"
+  >
+    Cancel
+  </a>
+
+  <button
+    type="submit"
+    class="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-400 text-black font-bold transition"
+  >
+    Save Trade
+  </button>
+
+</div>
+  </form>
+
+</main>
+
+</body>
+<script src="../js/add-trade.js"></script>
+</html>
