@@ -17,7 +17,7 @@ tradeForm.addEventListener("submit", async (event) => {
 
     const token = localStorage.getItem("token");
 
-    const response = await fetch("http://localhost:4000/api/trades", {
+    const response = await fetch("https://yourjournal.onrender.com/api/trades", {
         method: "POST",
 
         headers: {

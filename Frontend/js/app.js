@@ -1,5 +1,5 @@
 
-const API_URL = "http://localhost:4000/api";
+const API_URL = "https://yourjournal.onrender.com/api";
 const token = localStorage.getItem("token");
 
 let user = null;
