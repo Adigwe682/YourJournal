@@ -9,13 +9,14 @@ import {
   RegisterUser,
   LoginUser,
 } from "../Controller/userController.js";
+import { authLimiter } from "../Middleware/rateLimiter.js";
 
 const userRoute = express.Router();
 
 userRoute.post("/new-user", CreateUser);
 
-userRoute.post("/register", RegisterUser);
-userRoute.post("/login", LoginUser);
+userRoute.post("/register", authLimiter, RegisterUser);
+userRoute.post("/login", authLimiter, LoginUser);
 
 userRoute.get("/all-users", GetAllUsers);
 userRoute.get("/get-one-user/:id", GetSingleUser);

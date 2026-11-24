@@ -21,7 +21,7 @@ loginForm.addEventListener("submit", async (event) => {
   `;
 
   try {
-    const response = await fetch("https://yourjournal.onrender.com/users/login", {
+    const response = await fetch(`${window.AUTH_URL}/login`, {
       method: "POST",
 
       headers: {

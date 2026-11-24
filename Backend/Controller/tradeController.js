@@ -1,15 +1,19 @@
-
 import mongoose from "mongoose";
 import Trade from "../Model/tradeModel.js";
 
 export const CreateTrade = async (req, res) => {
-  const trade = {
-    ...req.body,
-    user: req.user,
-  };
-
   try {
-    const newTrade = new Trade(trade);
+    const tradeData = {
+      ...req.body,
+      user: req.user,
+    };
+
+    // If an image file was uploaded, attach its path or Cloudinary URL
+    if (req.file) {
+      tradeData.image = req.file.path; 
+    }
+
+    const newTrade = new Trade(tradeData);
 
     await newTrade.save();
 
@@ -75,7 +79,7 @@ export const GetBestPairs = async (req, res) => {
     const bestPairs = await Trade.aggregate([
       {
         $match: {
-        user: new mongoose.Types.ObjectId(req.user),
+          user: new mongoose.Types.ObjectId(req.user),
           date: {
             $gte: startDate,
             $lt: endDate,
@@ -117,6 +121,7 @@ export const GetBestPairs = async (req, res) => {
     });
   }
 };
+
 export const GetSingleTrade = async (req, res) => {
   const { id } = req.params;
 
@@ -151,12 +156,17 @@ export const UpdateTrade = async (req, res) => {
   const { id } = req.params;
 
   try {
+    const updateData = { ...req.body };
+    if (req.file) {
+      updateData.image = req.file.path;
+    }
+
     const updatedTrade = await Trade.findOneAndUpdate(
       {
         _id: id,
         user: req.user,
       },
-      req.body,
+      updateData,
       {
         new: true,
         runValidators: true,

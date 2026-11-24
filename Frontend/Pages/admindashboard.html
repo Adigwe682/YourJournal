@@ -50,30 +50,62 @@
       </p>
     </div>
 
-    <!-- Registered Users Count -->
+    <!-- Registered Users Stats -->
     <section class="mb-8">
-      <div class="rounded-xl border border-white/10
-                  bg-[#101010] p-6 sm:p-8">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-        <p class="text-sm text-gray-400">
-          Total Registered Users
-        </p>
+        <!-- Total Registered Users -->
+        <div class="rounded-xl border border-orange-500/30
+                    bg-orange-500/10 p-6">
+          <p class="text-sm font-medium text-orange-400">
+            Total Registered Users
+          </p>
 
-        <div class="mt-4 flex items-end justify-between gap-4">
           <h2 id="totalUsers"
-              class="text-4xl sm:text-5xl font-bold">
+              class="mt-3 text-4xl sm:text-5xl font-bold">
             —
           </h2>
 
-          <span class="text-sm text-orange-500">
-            YourJournal
-          </span>
+          <p id="usersMessage"
+             class="mt-3 text-xs text-gray-400">
+            Connecting to user records...
+          </p>
         </div>
 
-        <p id="usersMessage"
-           class="mt-4 text-xs text-gray-500">
-          Connecting to user records...
-        </p>
+        <!-- Customers -->
+        <div class="rounded-xl border border-white/10
+                    bg-[#101010] p-6">
+          <p class="text-sm text-gray-400">
+            Customers
+          </p>
+
+          <h2 id="customerCount"
+              class="mt-3 text-3xl sm:text-4xl font-bold text-green-400">
+            —
+          </h2>
+
+          <p class="mt-3 text-xs text-gray-500">
+            Traders using YourJournal
+          </p>
+        </div>
+
+        <!-- Admins -->
+        <div class="rounded-xl border border-white/10
+                    bg-[#101010] p-6">
+          <p class="text-sm text-gray-400">
+            Admins
+          </p>
+
+          <h2 id="adminCount"
+              class="mt-3 text-3xl sm:text-4xl font-bold text-orange-400">
+            —
+          </h2>
+
+          <p class="mt-3 text-xs text-gray-500">
+            Accounts with admin access
+          </p>
+        </div>
+
       </div>
     </section>
 
@@ -130,12 +162,15 @@
 
   </main>
 
+  <script src="../js/api-config.js"></script>
   <script>
     
-const API_URL = "https://yourjournal.onrender.com/api";
+const API_URL = window.API_URL;
 const token = localStorage.getItem("token");
 
 const totalUsersElement = document.getElementById("totalUsers");
+const customerCountElement = document.getElementById("customerCount");
+const adminCountElement = document.getElementById("adminCount");
 const usersMessage = document.getElementById("usersMessage");
 const usersTable = document.getElementById("usersTable");
 const tableMessage = document.getElementById("tableMessage");
@@ -162,7 +197,7 @@ async function loadAdminDashboard() {
     if (response.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      window.location.href = "../login.html";
+      window.location.href = "./login.html";
       return;
     }
 
@@ -170,6 +205,8 @@ async function loadAdminDashboard() {
       usersMessage.textContent = "Admin access required.";
       tableMessage.textContent = "You are not authorised to view these records.";
       totalUsersElement.textContent = "—";
+      customerCountElement.textContent = "—";
+      adminCountElement.textContent = "—";
       usersTable.innerHTML = "";
       return;
     }
@@ -179,6 +216,8 @@ async function loadAdminDashboard() {
     }
 
     totalUsersElement.textContent = result.data.totalUsers;
+    customerCountElement.textContent = result.data.customers ?? 0;
+    adminCountElement.textContent = result.data.admins ?? 0;
     recentUsers = result.data.recentUsers;
 
     usersMessage.textContent = "Registered accounts in the database.";
@@ -187,6 +226,8 @@ async function loadAdminDashboard() {
   } catch (error) {
     console.error("Dashboard error:", error);
     totalUsersElement.textContent = "—";
+    customerCountElement.textContent = "—";
+    adminCountElement.textContent = "—";
     usersMessage.textContent = "Could not load user count. Check your server.";
     tableMessage.textContent = "Unable to load recent users.";
   }
@@ -245,7 +286,7 @@ searchInput.addEventListener("input", function () {
 document.getElementById("logoutBtn")?.addEventListener("click", function () {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-  window.location.href = "../login.html";
+  window.location.href = "./login.html";
 });
 
 loadAdminDashboard();

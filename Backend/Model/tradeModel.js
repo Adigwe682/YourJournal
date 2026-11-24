@@ -7,26 +7,44 @@ const tradeSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
-
         rr: {
             type: Number,
             required: true,
         },
-
         pnl: {
             type: Number,
             required: true,
         },
-
         date: {
             type: Date,
             required: true,
         },
-
         result: {
             type: String,
             enum: ["profit", "loss", "breakeven"],
             required: true,
+        },
+        session: {
+            type: String,
+            enum: ["London", "New York", "Asia", "Other", ""],
+            default: "",
+        },
+        setupTag: {
+            type: String,
+            trim: true,
+            default: "",
+        },
+        psychology: {
+            type: String,
+            enum: ["Followed Plan", "FOMO", "Revenge Trade", "Early Exit", "Over-leveraged", ""],
+            default: "Followed Plan",
+        },
+        criteria: {
+            type: String,
+            trim: true,
+        },
+        image: {
+            type: String,
         },
         user: {
             type: mongoose.Schema.Types.ObjectId,

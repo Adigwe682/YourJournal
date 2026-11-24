@@ -14,7 +14,7 @@ registerForm.addEventListener("submit", async (event) => {
 
   console.log(registerData);
 
-  const response = await fetch("https://yourjournal.onrender.com/users/register", {
+  const response = await fetch(`${window.AUTH_URL}/register`, {
     method: "POST",
 
     headers: {
