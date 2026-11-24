@@ -1,154 +1,375 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YourJournal | Trading Journal</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="YourJournal is a trading journal that doesn't flatter you. Log every trade in 20 seconds and see your real win rate, profit factor, and which setups actually make money.">
+  <title>YourJournal | The Trading Journal That Doesn't Flatter You</title>
+  <link rel="stylesheet" href="./output.css">
 </head>
 
 <body class="min-h-screen bg-[#080808] text-white flex flex-col overflow-x-hidden">
 
-  <!-- Navigation -->
-  <header class="border-b border-white/10 sticky top-0 bg-[#080808]/90 backdrop-blur-md z-50">
+  <!-- Nav -->
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-[#080808]/90 backdrop-blur-md">
     <nav class="mx-auto max-w-6xl px-4 sm:px-6 py-4
                 flex items-center justify-between gap-3">
 
-      <a href="./index.html"
-         class="text-lg sm:text-xl font-bold whitespace-nowrap tracking-wide">
+      <a href="./index.html" class="text-lg sm:text-xl font-bold whitespace-nowrap tracking-wide">
         Your<span class="text-orange-500">Journal</span>
       </a>
 
+      <div class="hidden sm:flex items-center gap-6 text-sm text-gray-400">
+        <a href="#problem" class="hover:text-white transition">The problem</a>
+        <a href="#tools" class="hover:text-white transition">What it does</a>
+      </div>
+
       <div class="flex items-center gap-2 sm:gap-4">
-        <a href="./Pages/login.html"
-           class="text-xs sm:text-sm text-gray-300 hover:text-white px-2 py-1.5 transition">
+        <a href="./Pages/login.html" class="text-xs sm:text-sm text-gray-300 hover:text-white px-2 py-1.5 transition">
           Login
         </a>
-
-        <a href="./pages/register.html"
+        <a href="./Pages/register.html"
            class="rounded-lg bg-orange-500 px-3 sm:px-4 py-2
                   text-xs sm:text-sm font-semibold text-black
-                  hover:bg-orange-600 whitespace-nowrap transition">
-          Get Started
+                  hover:bg-orange-400 whitespace-nowrap transition">
+          Start free
         </a>
       </div>
     </nav>
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-1 flex items-center">
+  <main class="flex-1">
+
+    <!-- ============ HERO ============ -->
     <section class="mx-auto max-w-6xl px-4 sm:px-6
-                    py-8 sm:py-12 lg:py-20
-                    grid grid-cols-1 md:grid-cols-2
-                    gap-8 sm:gap-12 items-center w-full">
+                    pt-12 sm:pt-20 pb-14 sm:pb-20
+                    grid grid-cols-1 lg:grid-cols-[1.05fr_1fr]
+                    gap-10 lg:gap-14 items-center w-full">
 
-      <!-- Introduction -->
-      <div class="min-w-0 text-center md:text-left">
-        <p class="mb-3 text-[11px] sm:text-xs font-bold
-                  tracking-widest text-orange-500 uppercase">
-          YOUR TRADING JOURNAL
-        </p>
-
-        <h1 class="text-3xl sm:text-5xl lg:text-6xl
-                   font-bold leading-[1.15] tracking-tight">
-          Your trading.
-          <span class="text-orange-500 block sm:inline">One journal.</span>
+      <div class="min-w-0">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
+          You think you have an edge.
+          <span class="text-orange-500 block mt-2">Your journal knows better.</span>
         </h1>
 
-        <p class="mt-4 sm:mt-5 max-w-md mx-auto md:mx-0 text-sm sm:text-base
-                  leading-relaxed text-gray-400">
-          Keep your trades organised, track your profit and loss,
-          and review your trading performance in one place.
+        <p class="mt-6 max-w-xl text-sm sm:text-base leading-relaxed text-gray-400">
+          Log a trade in twenty seconds — pair, session, setup, R:R, screenshot.
+          YourJournal computes the rest: win rate, profit factor, and which of
+          your setups is just gambling with extra steps.
         </p>
 
-        <div class="mt-6 sm:mt-7 flex flex-col sm:flex-row
-                    items-stretch sm:items-center justify-center md:justify-start gap-3 sm:gap-4">
-
+        <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
           <a href="./Pages/register.html"
              class="inline-flex justify-center items-center rounded-xl
-                    bg-orange-500 px-6 py-3.5
-                    text-sm font-bold text-black
-                    hover:bg-orange-600 transition shadow-lg shadow-orange-500/10">
-            Get Started
+                    bg-orange-500 px-6 py-3.5 text-sm font-bold text-black
+                    hover:bg-orange-400 transition shadow-lg shadow-orange-500/10">
+            Start a journal — it's free
           </a>
-
           <a href="./Pages/login.html"
-             class="text-center text-sm font-medium text-gray-300
-                    hover:text-white py-2.5 transition">
-            Already have an account? Log in &rarr;
+             class="inline-flex justify-center items-center text-sm font-medium
+                    text-gray-300 hover:text-white py-2.5 transition">
+            I already have an account
           </a>
         </div>
       </div>
 
-      <!-- Dashboard Preview Card -->
-      <div class="min-w-0 w-full rounded-2xl
-                  border border-white/10 bg-[#101010]
-                  p-5 sm:p-7 lg:p-8 shadow-2xl">
+      <!-- Real trade log -->
+      <figure class="min-w-0 w-full">
+        <div class="rounded-xl border border-white/10 bg-[#101010] overflow-hidden shadow-2xl shadow-black/40">
 
-        <div class="mb-6 flex items-start justify-between gap-3">
-          <div class="min-w-0">
-            <h2 class="text-base sm:text-xl font-bold">
-              Trading Overview
-            </h2>
-            <p class="mt-0.5 text-xs sm:text-sm text-gray-500">
-              Performance summary
+          <div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-white/10">
+            <p class="font-mono text-xs text-gray-400">trade_log / november 2026</p>
+            <p class="font-mono text-xs text-green-400">+$1,120.00</p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left font-mono text-xs sm:text-sm tabular-nums whitespace-nowrap">
+              <thead>
+                <tr class="border-b border-white/10 text-gray-400">
+                  <th class="px-3 sm:px-4 py-2.5 font-normal">pair</th>
+                  <th class="hidden sm:table-cell px-3 sm:px-4 py-2.5 font-normal">session</th>
+                  <th class="px-3 sm:px-4 py-2.5 font-normal">setup</th>
+                  <th class="hidden sm:table-cell px-3 sm:px-4 py-2.5 font-normal text-right">rr</th>
+                  <th class="px-3 sm:px-4 py-2.5 font-normal text-right">p&amp;l</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5">
+                <tr>
+                  <td class="px-3 sm:px-4 py-2.5 text-white">XAUUSD</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400">NEW YORK</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-gray-400">1D BOS</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400 text-right">3R</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-green-400 text-right">+450.00</td>
+                </tr>
+                <tr>
+                  <td class="px-3 sm:px-4 py-2.5 text-white">EURUSD</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400">LONDON</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-gray-400">liquidity sweep</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400 text-right">2R</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-green-400 text-right">+200.00</td>
+                </tr>
+                <tr>
+                  <td class="px-3 sm:px-4 py-2.5 text-white">GBPJPY</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400">ASIA</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-gray-400">FVG retest</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400 text-right">1.5R</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-red-400 text-right">-180.00</td>
+                </tr>
+                <tr>
+                  <td class="px-3 sm:px-4 py-2.5 text-white">NAS100</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400">NEW YORK</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-gray-400">OB continuation</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400 text-right">5R</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-green-400 text-right">+620.00</td>
+                </tr>
+                <tr>
+                  <td class="px-3 sm:px-4 py-2.5 text-white">EURUSD</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400">LONDON</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-red-400">
+                    chase entry
+                    <span class="ml-1.5 rounded border border-red-500/40 px-1 py-0.5 text-[11px] uppercase">
+                      revenge
+                    </span>
+                  </td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400 text-right">1R</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-red-400 text-right">-150.00</td>
+                </tr>
+                <tr>
+                  <td class="px-3 sm:px-4 py-2.5 text-white">XAUUSD</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400">LONDON</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-gray-400">CHoCH re-entry</td>
+                  <td class="hidden sm:table-cell px-3 sm:px-4 py-2.5 text-gray-400 text-right">2R</td>
+                  <td class="px-3 sm:px-4 py-2.5 text-green-400 text-right">+180.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="px-4 py-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+            <p class="font-mono text-xs text-gray-400">6 trades · 4 wins · PF 4.39</p>
+            <p class="font-mono text-xs text-green-400">net +$1,120.00</p>
+          </div>
+
+        </div>
+
+        <figcaption class="mt-3 text-xs text-gray-400 leading-relaxed">
+          One of those is a revenge trade you'd have sworn you didn't take.
+          You tagged it yourself.
+        </figcaption>
+      </figure>
+
+    </section>
+
+    <!-- ============ 01 / THE PROBLEM ============ -->
+    <section id="problem" class="border-t border-white/10 scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-20">
+
+        <p class="font-mono text-xs text-orange-500">01 / THE PROBLEM</p>
+        <h2 class="mt-3 text-2xl sm:text-4xl font-bold tracking-tight max-w-2xl">
+          Your memory is a highlight reel.
+        </h2>
+
+        <div class="mt-8 border-t border-white/10">
+
+          <div class="grid sm:grid-cols-2 gap-2 sm:gap-8 py-5 border-b border-white/10">
+            <p class="text-sm text-gray-400 italic">"I'm a 60% win rate trader."</p>
+            <p class="text-sm text-white">
+              47% across 84 trades. The bad week was real, not bad luck.
             </p>
           </div>
 
-          <span class="shrink-0 rounded-lg bg-orange-500/10 border border-orange-500/20 px-2.5 py-1 text-xs font-bold text-orange-500">
-            YJ
-          </span>
-        </div>
-
-        <div class="space-y-4 sm:space-y-5">
-
-          <div class="flex items-center justify-between gap-4
-                      border-b border-white/5 pb-3.5">
-            <span class="text-xs sm:text-sm text-gray-400">Total Trades</span>
-            <span class="text-sm sm:text-base font-semibold text-gray-200">—</span>
+          <div class="grid sm:grid-cols-2 gap-2 sm:gap-8 py-5 border-b border-white/10">
+            <p class="text-sm text-gray-400 italic">"That setup is my bread and butter."</p>
+            <p class="text-sm text-white">
+              CHoCH: 11 trades, profit factor 0.8. It doesn't pay for itself.
+            </p>
           </div>
 
-          <div class="flex items-center justify-between gap-4
-                      border-b border-white/5 pb-3.5">
-            <span class="text-xs sm:text-sm text-gray-400">Win Rate</span>
-            <span class="text-sm sm:text-base font-semibold text-gray-200">—</span>
-          </div>
-
-          <div class="flex items-center justify-between gap-4">
-            <span class="text-xs sm:text-sm text-gray-400">Monthly P&amp;L</span>
-            <span class="text-sm sm:text-base font-bold text-orange-500">—</span>
+          <div class="grid sm:grid-cols-2 gap-2 sm:gap-8 py-5 border-b border-white/10">
+            <p class="text-sm text-gray-400 italic">"I only lose on news days."</p>
+            <p class="text-sm text-white">
+              Four of your five biggest losses are tagged "revenge" — by you, in the moment.
+            </p>
           </div>
 
         </div>
 
-        <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-          <p class="text-[11px] sm:text-xs leading-normal text-gray-500">
-            Your trading records, organised securely.
-          </p>
-          <div class="flex gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>
-            <span class="w-1.5 h-1.5 rounded-full bg-orange-500/40"></span>
-            <span class="w-1.5 h-1.5 rounded-full bg-orange-500/20"></span>
-          </div>
-        </div>
+        <p class="mt-6 text-sm text-gray-400 max-w-2xl">
+          None of this is new information. It's sitting in your trading history
+          right now — you've just never forced yourself to read it.
+        </p>
+
       </div>
-
     </section>
+
+    <!-- ============ 02 / WHAT YOU GET ============ -->
+    <section id="tools" class="border-t border-white/10 bg-[#0a0a0a] scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-20">
+
+        <p class="font-mono text-xs text-orange-500">02 / THE TOOLSET</p>
+        <h2 class="mt-3 text-2xl sm:text-4xl font-bold tracking-tight max-w-2xl">
+          What you actually get.
+        </h2>
+
+        <ol class="mt-10 grid sm:grid-cols-2 gap-x-10 gap-y-8">
+
+          <li class="border-t border-white/10 pt-4">
+            <p class="font-mono text-xs text-orange-500">01</p>
+            <h3 class="mt-2 text-base font-semibold">A log you'll actually keep</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-gray-400">
+              Pair, date, session, result, R:R, P&amp;L, screenshot, notes.
+              Twenty seconds per trade. CSV export whenever you want your data out.
+            </p>
+          </li>
+
+          <li class="border-t border-white/10 pt-4">
+            <p class="font-mono text-xs text-orange-500">02</p>
+            <h3 class="mt-2 text-base font-semibold">Stats that can't flatter you</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-gray-400">
+              Win rate, profit factor (gross profit ÷ gross loss), average R:R,
+              monthly P&amp;L. Same formula every time, no good-day rounding.
+            </p>
+          </li>
+
+          <li class="border-t border-white/10 pt-4">
+            <p class="font-mono text-xs text-orange-500">03</p>
+            <h3 class="mt-2 text-base font-semibold">Your setups, your tags</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-gray-400">
+              Type any tag you want — BOS, CHoCH, discount, confirmation entry.
+              Then sort by tag and see which ones are genuinely worth taking.
+            </p>
+          </li>
+
+          <li class="border-t border-white/10 pt-4">
+            <p class="font-mono text-xs text-orange-500">04</p>
+            <h3 class="mt-2 text-base font-semibold">A calendar with red days</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-gray-400">
+              Daily P&amp;L, colour-coded. Click any day and get exactly the
+              trades you took — including the one you'd rather forget.
+            </p>
+          </li>
+
+          <li class="border-t border-white/10 pt-4">
+            <p class="font-mono text-xs text-orange-500">05</p>
+            <h3 class="mt-2 text-base font-semibold">A price on your bad habits</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-gray-400">
+              Tag revenge, FOMO and over-leveraging while they're happening.
+              The dashboard totals what each one costs you, in dollars.
+            </p>
+          </li>
+
+          <li class="border-t border-white/10 pt-4">
+            <p class="font-mono text-xs text-orange-500">06</p>
+            <h3 class="mt-2 text-base font-semibold">A month you can hand to someone</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-gray-400">
+              One read-only link to your monthly report. Mentor, trading buddy,
+              or an archive for the version of you that's starting again in January.
+            </p>
+          </li>
+
+        </ol>
+
+      </div>
+    </section>
+
+    <!-- ============ 03 / THE HONEST PART ============ -->
+    <section class="border-t border-white/10 scroll-mt-16">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-20">
+
+        <p class="font-mono text-xs text-orange-500">03 / THE HONEST PART</p>
+        <h2 class="mt-3 text-2xl sm:text-4xl font-bold tracking-tight max-w-2xl">
+          What usually happens.
+        </h2>
+
+        <div class="mt-8 grid sm:grid-cols-3 gap-px bg-white/10 border border-white/10 rounded-xl overflow-hidden">
+          <div class="bg-[#101010] p-5 sm:p-6">
+            <p class="font-mono text-xs text-orange-500">week 1</p>
+            <p class="mt-2.5 text-sm leading-relaxed text-gray-400">
+              You log everything. Wins, losses, screenshots, the whole story.
+              You're going to be different this time.
+            </p>
+          </div>
+          <div class="bg-[#101010] p-5 sm:p-6">
+            <p class="font-mono text-xs text-orange-500">week 3</p>
+            <p class="mt-2.5 text-sm leading-relaxed text-gray-400">
+              You miss a day, then two. The app won't nag you or send some
+              streak email. That's deliberate.
+            </p>
+          </div>
+          <div class="bg-[#101010] p-5 sm:p-6">
+            <p class="font-mono text-xs text-orange-500">month 2</p>
+            <p class="mt-2.5 text-sm leading-relaxed text-gray-400">
+              You open it, see the revenge trades cost you $1,180, and finally
+              stop pretending they were "management."
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ CLOSE ============ -->
+    <section class="border-t border-white/10 bg-[#0a0a0a]">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 py-14 sm:py-20">
+
+        <div class="max-w-2xl">
+          <h2 class="text-3xl sm:text-5xl font-bold leading-tight tracking-tight">
+            The market already lies to you enough.
+            <span class="text-orange-500 block mt-2">Start a journal that doesn't.</span>
+          </h2>
+
+          <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+            <a href="./Pages/register.html"
+               class="inline-flex justify-center items-center rounded-xl
+                      bg-orange-500 px-6 py-3.5 text-sm font-bold text-black
+                      hover:bg-orange-400 transition shadow-lg shadow-orange-500/10">
+              Start a journal — it's free
+            </a>
+            <a href="./Pages/login.html"
+               class="inline-flex justify-center items-center text-sm font-medium
+                      text-gray-300 hover:text-white py-2.5 transition">
+              Log in
+            </a>
+          </div>
+
+          <p class="mt-6 text-xs leading-relaxed text-gray-400 max-w-lg">
+            Free, no card. One rule from day one: save your password.
+            Nobody at YourJournal can recover it — that's the trade you make
+            for the journal being yours.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Footer -->
   <footer class="border-t border-white/10 mt-auto">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 py-5
-                flex flex-col sm:flex-row
-                items-center sm:items-center
-                justify-between gap-3 text-center sm:text-left">
-      <p class="text-xs text-gray-500">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 py-8
+                flex flex-col md:flex-row items-center justify-between
+                gap-5 text-center md:text-left">
+
+      <div>
+        <a href="./index.html" class="text-sm font-bold tracking-wide">
+          Your<span class="text-orange-500">Journal</span>
+        </a>
+        <p class="mt-1.5 text-xs text-gray-400">
+          Track your trades. Understand your performance. Improve your process.
+        </p>
+      </div>
+
+      <nav class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-gray-400">
+        <a href="#problem" class="whitespace-nowrap hover:text-white transition">The problem</a>
+        <a href="#tools" class="whitespace-nowrap hover:text-white transition">What it does</a>
+        <a href="./Pages/login.html" class="whitespace-nowrap hover:text-white transition">Login</a>
+        <a href="./Pages/register.html" class="whitespace-nowrap hover:text-white transition">Register</a>
+      </nav>
+
+      <p class="text-xs text-gray-400">
         &copy; 2026 YourJournal. All rights reserved.
       </p>
 
-      <p class="text-xs text-gray-500">
-        Track your trades. Learn from your results.
-      </p>
     </div>
   </footer>
 
