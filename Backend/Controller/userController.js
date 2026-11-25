@@ -157,40 +157,15 @@ export const GetSingleUser = async (req, res) => {
 export const LoginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  console.log(
-    "MongoDB state before login query:",
-    mongoose.connection.readyState
-  );
-
   try {
     await mongoose.connection.asPromise();
-
-    console.log(
-      "MongoDB state after reconnect attempt:",
-      mongoose.connection.readyState
-    );
-
-    console.log(
-      "MongoDB state before login query:",
-      mongoose.connection.readyState
-    );
 
     if (mongoose.connection.readyState !== 1) {
       await mongoose.connect(process.env.MONGO_URI);
     }
 
-    console.log(
-      "MongoDB state before findOne:",
-      mongoose.connection.readyState
-    );
-
     const user = await userModel.findOne({ email });
 
-    console.log("User query completed");
-
-    // the rest of your code...
-
-    // rest of your code...
     if (!user) {
       return res.status(404).json({
         success: false,

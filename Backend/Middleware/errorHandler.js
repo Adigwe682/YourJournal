@@ -25,6 +25,15 @@ const MESSAGE_RULES = [
     status: 400,
     message: "Unsupported image format. Use a JPG, PNG or WebP under 10 MB.",
   },
+  {
+    // Cloudinary credentials missing on this deployment (Render env
+    // vars not set). Uploads fail, but saving a trade without a
+    // screenshot still works, so say exactly that.
+    test: (code, message) => /must supply|cloud_name|api_key|api_secret/i.test(message),
+    status: 503,
+    message:
+      "Image uploads are unavailable right now. You can still save this trade without a screenshot.",
+  },
 ];
 
 const errorHandler = (error, req, res, next) => {
@@ -45,7 +54,7 @@ const errorHandler = (error, req, res, next) => {
 
   console.error("Unhandled request error:", message || error);
 
-  res.status(500).json({
+  return res.status(500).json({
     success: false,
     message: "Server error",
   });
