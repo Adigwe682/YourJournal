@@ -235,9 +235,6 @@
   .relative {
     position: relative;
   }
-  .static {
-    position: static;
-  }
   .sticky {
     position: sticky;
   }
@@ -385,6 +382,9 @@
   .h-12 {
     height: calc(var(--spacing) * 12);
   }
+  .h-16 {
+    height: calc(var(--spacing) * 16);
+  }
   .h-28 {
     height: calc(var(--spacing) * 28);
   }
@@ -414,6 +414,9 @@
   }
   .w-12 {
     width: calc(var(--spacing) * 12);
+  }
+  .w-16 {
+    width: calc(var(--spacing) * 16);
   }
   .w-44 {
     width: calc(var(--spacing) * 44);
@@ -773,6 +776,9 @@
   }
   .object-cover {
     object-fit: cover;
+  }
+  .p-3 {
+    padding: calc(var(--spacing) * 3);
   }
   .p-4 {
     padding: calc(var(--spacing) * 4);
@@ -1172,6 +1178,14 @@
     @supports (color: color-mix(in lab, red, red)) {
       .hover\:border-white\/20:hover {
         border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
+      }
+    }
+    .hover\:border-white\/25:hover {
+      border-color: color-mix(in srgb, #fff 25%, transparent);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:border-white\/25:hover {
+        border-color: color-mix(in oklab, var(--color-white) 25%, transparent);
       }
     }
     .hover\:bg-orange-400:hover {

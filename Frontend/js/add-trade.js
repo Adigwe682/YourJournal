@@ -56,3 +56,97 @@ if (tradeForm) {
     }
   });
 }
+
+// ========================================
+// IMAGE PREVIEW + PASTE-TO-UPLOAD
+// ----------------------------------------
+// A screenshot on the clipboard (PrtScn, Win+V,
+// or copy image) can be pasted straight into the
+// file input, so the existing FormData flow uploads
+// it unchanged.
+// ========================================
+
+const imageInput = document.querySelector("#image");
+const imagePreview = document.querySelector("#imagePreview");
+const imagePreviewImg = document.querySelector("#imagePreviewImg");
+const imagePreviewName = document.querySelector("#imagePreviewName");
+const imagePreviewSize = document.querySelector("#imagePreviewSize");
+const imagePreviewRemove = document.querySelector("#imagePreviewRemove");
+
+let previewObjectUrl = null;
+
+function showImagePreview(file) {
+  if (!file || !imagePreview) return;
+
+  if (previewObjectUrl) {
+    URL.revokeObjectURL(previewObjectUrl);
+  }
+
+  previewObjectUrl = URL.createObjectURL(file);
+  imagePreviewImg.src = previewObjectUrl;
+  imagePreviewName.textContent = file.name || "pasted-screenshot.png";
+  imagePreviewSize.textContent = `${(file.size / 1024).toFixed(1)} KB · ready to upload`;
+
+  imagePreview.classList.remove("hidden");
+  imagePreview.classList.add("flex");
+}
+
+function clearImagePreview() {
+  if (previewObjectUrl) {
+    URL.revokeObjectURL(previewObjectUrl);
+    previewObjectUrl = null;
+  }
+
+  if (imageInput) {
+    imageInput.value = "";
+  }
+
+  if (imagePreview) {
+    imagePreview.classList.add("hidden");
+    imagePreview.classList.remove("flex");
+  }
+}
+
+if (imageInput) {
+  imageInput.addEventListener("change", () => {
+    const file = imageInput.files[0];
+    if (file) {
+      showImagePreview(file);
+    } else {
+      clearImagePreview();
+    }
+  });
+}
+
+if (imagePreviewRemove) {
+  imagePreviewRemove.addEventListener("click", clearImagePreview);
+}
+
+// Paste an image anywhere on this page.
+// Text pastes are left alone so normal copy/paste still works.
+document.addEventListener("paste", (event) => {
+  if (!imageInput || !event.clipboardData) return;
+
+  const items = Array.from(event.clipboardData.items || []);
+  const imageItem = items.find(
+    (item) => item.kind === "file" && item.type.startsWith("image/")
+  );
+
+  if (!imageItem) return;
+
+  const file = imageItem.getAsFile();
+  if (!file) return;
+
+  event.preventDefault();
+
+  try {
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    imageInput.files = transfer.files;
+  } catch (error) {
+    console.error("Could not attach pasted image:", error);
+    return;
+  }
+
+  showImagePreview(file);
+});

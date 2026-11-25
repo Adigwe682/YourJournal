@@ -1038,6 +1038,9 @@ function createEditModal() {
           <input id="editImage" name="image" type="file" accept="image/*"
             style="display: block; width: 100%; box-sizing: border-box; border: 1px solid #303030; border-radius: 11px; background: #080808; color: #9ca3af; padding: 9px 12px; font-size: 13px; outline-color: #f97316;" />
           <div id="editImageHint" style="margin-top: 8px; font-size: 11px; color: #6b7280; overflow-wrap: anywhere;"></div>
+          <p style="margin-top: 6px; font-size: 11px; color: #9ca3af;">
+            Tip: take a screenshot (PrtScn), then press Ctrl+V to attach it.
+          </p>
         </div>
 
         <p id="editTradeError" role="alert"
@@ -1125,6 +1128,66 @@ function openEditModal(trade) {
 
   document.querySelector("#editPair").focus();
 }
+
+// ========================================
+// PASTE A SCREENSHOT INTO THE EDIT MODAL
+// ----------------------------------------
+// Ctrl+V while the edit modal is open attaches a
+// clipboard image to #editImage, so Save Changes
+// uploads it through the existing multipart flow.
+// ========================================
+
+function showEditImageReady(file) {
+  const imageHint = document.querySelector("#editImageHint");
+  if (!imageHint || !file) return;
+
+  imageHint.innerHTML = `New image ready: <span style="color: #ffffff;">${escapeHTML(
+    file.name || "pasted-screenshot.png"
+  )}</span> — replaces the current screenshot when you save.`;
+}
+
+// Delegated on document so it works regardless of when the modal is created
+document.addEventListener(
+  "change",
+  (event) => {
+    if (event.target && event.target.id === "editImage") {
+      showEditImageReady(event.target.files[0]);
+    }
+  },
+  true
+);
+
+document.addEventListener("paste", (event) => {
+  const modal = document.querySelector("#editTradeModal");
+  const editImageInput = document.querySelector("#editImage");
+
+  if (!editImageInput || !modal || modal.style.display !== "flex" || !event.clipboardData) {
+    return;
+  }
+
+  const items = Array.from(event.clipboardData.items || []);
+  const imageItem = items.find(
+    (item) => item.kind === "file" && item.type.startsWith("image/")
+  );
+
+  if (!imageItem) return;
+
+  const file = imageItem.getAsFile();
+  if (!file) return;
+
+  event.preventDefault();
+
+  try {
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    editImageInput.files = transfer.files;
+  } catch (error) {
+    console.error("Could not attach pasted image:", error);
+    return;
+  }
+
+  showEditImageReady(file);
+});
 
 // ========================================
 // SAVE EDITED TRADE
