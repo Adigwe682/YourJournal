@@ -25,6 +25,31 @@ if (missingCloudinaryVars.length > 0) {
       "Screenshot uploads will fail with 'Must supply api_key'. " +
       "Set them in Render -> Environment."
   );
+} else {
+  // Credentials are present - verify they actually match Cloudinary.
+  // A wrong/whitespace-corrupted secret shows up here at boot instead
+  // of as an "Invalid Signature" error on the first trade save.
+  const describeCloudinaryError = (error) => {
+    if (!error) return "unknown error";
+    if (typeof error === "string") return error;
+    return (
+      error.message ||
+      (typeof error.error === "string" ? error.error : "") ||
+      error.error?.message ||
+      JSON.stringify(error.error || error)
+    );
+  };
+
+  cloudinary.api
+    .ping()
+    .then(() => console.log("[upload] Cloudinary credentials verified."))
+    .catch((error) =>
+      console.warn(
+        `[upload] WARNING: Cloudinary credentials REJECTED (${describeCloudinaryError(error)}). ` +
+          "Re-copy CLOUDINARY_CLOUD_NAME / API_KEY / API_SECRET from Backend/.env " +
+          "with no stray spaces or quotes."
+      )
+    );
 }
 
 // Set up Cloudinary storage engine for Multer
