@@ -38,16 +38,28 @@ if (tradeForm) {
         return;
       }
 
-      const data = await response.json();
+      // Parse defensively: a proxy/502 can return HTML instead of JSON.
+      let data = null;
+      try {
+        data = await response.json();
+      } catch {
+        data = null;
+      }
 
-      if (response.ok && data.success) {
+      if (response.ok && data && data.success) {
         window.location.href = "./dashboard.html";
+      } else if (data && data.message) {
+        alert(data.message);
       } else {
-        alert(data.message || "Failed to save trade.");
+        alert(
+          response.status >= 500
+            ? "The server ran into a problem. Please try again."
+            : `Could not save the trade (error ${response.status}). Please try again.`
+        );
       }
     } catch (error) {
       console.error("Error saving trade:", error);
-      alert("An error occurred while saving the trade.");
+      alert(error.message || "An error occurred while saving the trade.");
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
@@ -73,7 +85,24 @@ const imagePreviewName = document.querySelector("#imagePreviewName");
 const imagePreviewSize = document.querySelector("#imagePreviewSize");
 const imagePreviewRemove = document.querySelector("#imagePreviewRemove");
 
+// Cloudinary rejects anything over 10 MB, so catch it here first
+// and tell the user in plain words instead of letting the upload fail.
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+
 let previewObjectUrl = null;
+
+function rejectOversizedImage(file) {
+  if (file.size <= MAX_IMAGE_BYTES) {
+    return false;
+  }
+
+  alert(
+    `That image is ${(file.size / 1024 / 1024).toFixed(1)} MB. ` +
+      "Screenshots must be 10 MB or smaller. Crop or compress it, then try again."
+  );
+  clearImagePreview();
+  return true;
+}
 
 function showImagePreview(file) {
   if (!file || !imagePreview) return;
@@ -110,6 +139,9 @@ function clearImagePreview() {
 if (imageInput) {
   imageInput.addEventListener("change", () => {
     const file = imageInput.files[0];
+    if (file && rejectOversizedImage(file)) {
+      return;
+    }
     if (file) {
       showImagePreview(file);
     } else {
@@ -138,6 +170,10 @@ document.addEventListener("paste", (event) => {
   if (!file) return;
 
   event.preventDefault();
+
+  if (rejectOversizedImage(file)) {
+    return;
+  }
 
   try {
     const transfer = new DataTransfer();

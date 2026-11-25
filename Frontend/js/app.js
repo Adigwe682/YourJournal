@@ -63,10 +63,23 @@ async function apiRequest(url, options = {}) {
     throw new Error("Your session has expired. Please log in again.");
   }
 
-  const data = await response.json();
+  // Parse defensively: a proxy/502 can return HTML instead of JSON.
+  let data = null;
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
 
   if (!response.ok) {
-    throw new Error(data.message || "Something went wrong.");
+    if (data && data.message) {
+      throw new Error(data.message);
+    }
+    throw new Error(
+      response.status >= 500
+        ? "The server ran into a problem. Please try again."
+        : `Request failed (${response.status}). Please try again.`
+    );
   }
 
   return data;
@@ -80,6 +93,20 @@ function escapeHTML(value) {
     '"': "&quot;",
     "'": "&#039;",
   })[character]);
+}
+
+// Buy / Sell chip shown on each trade card.
+// Trades logged before this field existed return "" -> no badge.
+function directionBadge(direction) {
+  if (direction === "buy") {
+    return `<span class="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-green-500/15 text-green-400 border border-green-500/25">BUY</span>`;
+  }
+
+  if (direction === "sell") {
+    return `<span class="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-red-500/15 text-red-400 border border-red-500/25">SELL</span>`;
+  }
+
+  return "";
 }
 
 function getSelectedMonth() {
@@ -523,8 +550,9 @@ function renderTradeCards(tradesToDisplay) {
           </div>
         </div>
 
-        <!-- Quick Tags Row (Session, Setup, Psychology) -->
+        <!-- Quick Tags Row (Direction, Session, Setup, Psychology) -->
         <div class="flex flex-wrap gap-1.5 mt-2.5">
+          ${directionBadge(trade.direction)}
           ${trade.session ? `<span class="px-2 py-0.5 text-[10px] font-medium rounded-md bg-white/10 text-gray-300">${escapeHTML(trade.session)}</span>` : ""}
           ${trade.setupTag ? `<span class="px-2 py-0.5 text-[10px] font-medium rounded-md bg-orange-500/15 text-orange-400 border border-orange-500/20">${escapeHTML(trade.setupTag)}</span>` : ""}
           ${trade.psychology ? `
@@ -1020,6 +1048,18 @@ function createEditModal() {
               <option value="Over-leveraged">Over-leveraged</option>
             </select>
           </div>
+
+          <div style="min-width: 0;">
+            <label for="editDirection" style="display: block; margin-bottom: 6px; font-size: 12px; color: #d1d5db;">
+              Direction
+            </label>
+            <select id="editDirection" name="direction"
+              style="display: block; width: 100%; box-sizing: border-box; border: 1px solid #303030; border-radius: 11px; background: #080808; color: #ffffff; padding: 10px 12px; font-size: 14px; outline-color: #f97316;">
+              <option value="">Not set</option>
+              <option value="buy">Buy</option>
+              <option value="sell">Sell</option>
+            </select>
+          </div>
         </div>
 
         <div style="margin-top: 16px;">
@@ -1093,6 +1133,7 @@ function openEditModal(trade) {
   document.querySelector("#editSession").value = trade.session || "";
   document.querySelector("#editSetupTag").value = trade.setupTag || "";
   document.querySelector("#editPsychology").value = trade.psychology || "Followed Plan";
+  document.querySelector("#editDirection").value = trade.direction || "";
   document.querySelector("#editCriteria").value = trade.criteria || "";
 
   // Reset the file input and show what's currently attached
@@ -1141,6 +1182,16 @@ function showEditImageReady(file) {
   const imageHint = document.querySelector("#editImageHint");
   if (!imageHint || !file) return;
 
+  // Cloudinary rejects anything over 10 MB - catch it here so the
+  // user gets a plain message instead of a failed save.
+  if (file.size > 10 * 1024 * 1024) {
+    document.querySelector("#editImage").value = "";
+    imageHint.textContent = `That image is ${(file.size / 1024 / 1024).toFixed(1)} MB - screenshots must be 10 MB or smaller. Crop or compress it, then try again.`;
+    imageHint.style.color = "#f87171";
+    return;
+  }
+
+  imageHint.style.color = "";
   imageHint.innerHTML = `New image ready: <span style="color: #ffffff;">${escapeHTML(
     file.name || "pasted-screenshot.png"
   )}</span> — replaces the current screenshot when you save.`;
@@ -1209,6 +1260,7 @@ async function saveTradeChanges(event) {
   const session = document.querySelector("#editSession").value;
   const setupTag = document.querySelector("#editSetupTag").value;
   const psychology = document.querySelector("#editPsychology").value;
+  const direction = document.querySelector("#editDirection").value;
   const criteria = document.querySelector("#editCriteria").value.trim();
   const imageFile = document.querySelector("#editImage").files[0];
 
@@ -1242,6 +1294,7 @@ async function saveTradeChanges(event) {
     formData.append("session", session);
     formData.append("setupTag", setupTag);
     formData.append("psychology", psychology);
+    formData.append("direction", direction);
     formData.append("criteria", criteria);
 
     if (imageFile) {
@@ -1524,6 +1577,7 @@ function openLightbox(trade) {
 
         <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding-top: 14px; border-top: 1px solid #292929;">
           ${metaItem("Date", formatDate(trade.date))}
+          ${metaItem("Direction", trade.direction ? trade.direction.toUpperCase() : "-")}
           ${metaItem("Result", trade.result || "-")}
           ${metaItem("Risk : Reward", trade.rr ?? trade.RR ? `${trade.rr ?? trade.RR}R` : "-")}
           ${metaItem("Session", trade.session || "-")}
@@ -1594,6 +1648,7 @@ function exportMonthCsv() {
   const headers = [
     "Date",
     "Pair",
+    "Direction",
     "Result",
     "PnL",
     "RR",
@@ -1610,6 +1665,7 @@ function exportMonthCsv() {
       [
         formatDateForInput(trade.date),
         trade.pair,
+        trade.direction || "",
         trade.result,
         Number(trade.pnl || 0),
         trade.rr ?? trade.RR ?? "",

@@ -24,6 +24,11 @@ const tradeSchema = new mongoose.Schema(
             enum: ["profit", "loss", "breakeven"],
             required: true,
         },
+        direction: {
+            type: String,
+            enum: ["buy", "sell", ""],
+            default: "",
+        },
         session: {
             type: String,
             enum: ["London", "New York", "Asia", "Other", ""],

@@ -8,6 +8,7 @@ import userRoute from "../Backend/Routes/userRoute.js";
 import reportRoutes from "./Routes/reportRoutes.js";
 import adminRoute from "./Routes/adminRoute.js";
 import sanitizeInput from "./Middleware/sanitize.js";
+import errorHandler from "./Middleware/errorHandler.js";
 import { generalLimiter } from "./Middleware/rateLimiter.js";
 
 const app = express();
@@ -40,6 +41,17 @@ app.use("/users", userRoute);
 app.use("/api/trades", tradeRoute);
 app.use("/api/reports", reportRoutes);
 app.use("/api/admin", adminRoute);
+
+// Unknown route -> JSON, never an HTML page the frontend can't parse
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found",
+  });
+});
+
+// Must be last: turns Multer/Cloudinary/unexpected errors into JSON
+app.use(errorHandler);
 
 mongoose.connection.on("disconnected", () => console.log("MongoDB Disconnected"));
 mongoose.connection.on("error", (e) => console.error("MongoDB Error:", e.message));

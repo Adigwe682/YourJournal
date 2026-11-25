@@ -19,6 +19,22 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  // Reject oversized files before they reach Cloudinary, so the
+  // error handler can return a clear JSON message instead of a 500.
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10 MB, matches Cloudinary's cap
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype && file.mimetype.startsWith("image/")) {
+      return cb(null, true);
+    }
+
+    const error = new Error("Unsupported image format");
+    error.http_code = 400;
+    cb(error);
+  },
+});
 
 export default upload;

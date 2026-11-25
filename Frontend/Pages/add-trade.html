@@ -77,6 +77,32 @@
         </div>
       </div>
 
+      <!-- Direction: Buy / Sell -->
+      <div class="mt-5">
+        <span class="block text-sm text-gray-400 mb-2">
+          Direction
+        </span>
+        <div class="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Trade direction">
+          <label class="relative cursor-pointer">
+            <input type="radio" id="directionBuy" name="direction" value="buy" class="peer sr-only" checked>
+            <span class="block w-full rounded-xl border border-white/10 bg-[#0b0b0b] px-4 py-3 text-center text-sm font-semibold text-gray-400 transition
+              peer-checked:border-green-500/50 peer-checked:bg-green-500/10 peer-checked:text-green-400
+              peer-focus-visible:ring-2 peer-focus-visible:ring-green-500/60 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#080808]">
+              Buy
+            </span>
+          </label>
+
+          <label class="relative cursor-pointer">
+            <input type="radio" id="directionSell" name="direction" value="sell" class="peer sr-only">
+            <span class="block w-full rounded-xl border border-white/10 bg-[#0b0b0b] px-4 py-3 text-center text-sm font-semibold text-gray-400 transition
+              peer-checked:border-red-500/50 peer-checked:bg-red-500/10 peer-checked:text-red-400
+              peer-focus-visible:ring-2 peer-focus-visible:ring-red-500/60 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#080808]">
+              Sell
+            </span>
+          </label>
+        </div>
+      </div>
+
       <div class="mt-5">
         <label for="result" class="block text-sm text-gray-400 mb-2">
           Trade Result
