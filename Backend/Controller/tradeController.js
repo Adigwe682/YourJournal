@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import Trade from "../Model/tradeModel.js";
+import challengeModel from "../Model/challengeModel.js";
+import { evaluateChallenge } from "../Utils/challenge.js";
 
 export const CreateTrade = async (req, res) => {
   try {
@@ -7,6 +9,44 @@ export const CreateTrade = async (req, res) => {
       ...req.body,
       user: req.user,
     };
+
+    // Not a schema field - handled explicitly below
+    delete tradeData.challengeId;
+    delete tradeData.challenge;
+
+    // Optional: log this trade under the user's active challenge,
+    // so its P&L is added to / deducted from the challenge balance.
+    const challengeId = String(req.body.challengeId || "").trim();
+
+    if (challengeId) {
+      if (!mongoose.Types.ObjectId.isValid(challengeId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Unknown challenge.",
+        });
+      }
+
+      const challenge = await challengeModel.findOne({
+        _id: challengeId,
+        user: req.user,
+      });
+
+      if (!challenge) {
+        return res.status(404).json({
+          success: false,
+          message: "Challenge not found",
+        });
+      }
+
+      if (challenge.status !== "active") {
+        return res.status(409).json({
+          success: false,
+          message: "That challenge has finished - new trades can't be logged under it.",
+        });
+      }
+
+      tradeData.challenge = challenge._id;
+    }
 
     // If an image file was uploaded, attach its path or Cloudinary URL
     if (req.file) {
@@ -16,6 +56,14 @@ export const CreateTrade = async (req, res) => {
     const newTrade = new Trade(tradeData);
 
     await newTrade.save();
+
+    // The new P&L may have passed or blown the challenge
+    if (newTrade.challenge) {
+      const challenge = await challengeModel.findById(newTrade.challenge);
+      if (challenge) {
+        await evaluateChallenge(challenge);
+      }
+    }
 
     res.status(201).json({
       success: true,
@@ -156,7 +204,38 @@ export const UpdateTrade = async (req, res) => {
   const { id } = req.params;
 
   try {
+    const existing = await Trade.findOne({
+      _id: id,
+      user: req.user,
+    });
+
+    if (!existing) {
+      return res.status(404).json({
+        success: false,
+        message: "Trade not found",
+      });
+    }
+
+    // A finished challenge has a frozen trade log, otherwise the
+    // recorded result could contradict the stored status.
+    if (existing.challenge) {
+      const challenge = await challengeModel.findById(existing.challenge);
+
+      if (challenge && challenge.status !== "active") {
+        return res.status(409).json({
+          success: false,
+          message: "This trade belongs to a finished challenge and can't be changed.",
+        });
+      }
+    }
+
     const updateData = { ...req.body };
+
+    // Never allow re-linking or ownership changes through an edit
+    delete updateData.challengeId;
+    delete updateData.challenge;
+    delete updateData.user;
+
     if (req.file) {
       updateData.image = req.file.path;
     }
@@ -173,11 +252,12 @@ export const UpdateTrade = async (req, res) => {
       }
     );
 
-    if (!updatedTrade) {
-      return res.status(404).json({
-        success: false,
-        message: "Trade not found",
-      });
+    // A corrected P&L may change whether the challenge passed or failed
+    if (updatedTrade && updatedTrade.challenge) {
+      const challenge = await challengeModel.findById(updatedTrade.challenge);
+      if (challenge) {
+        await evaluateChallenge(challenge);
+      }
     }
 
     res.status(200).json({
@@ -198,16 +278,42 @@ export const DeleteTrade = async (req, res) => {
   const { id } = req.params;
 
   try {
+    const existing = await Trade.findOne({
+      _id: id,
+      user: req.user,
+    });
+
+    if (!existing) {
+      return res.status(404).json({
+        success: false,
+        message: "Trade not found",
+      });
+    }
+
+    // Same lock rule as edits: a finished challenge keeps its log
+    if (existing.challenge) {
+      const challenge = await challengeModel.findById(existing.challenge);
+
+      if (challenge && challenge.status !== "active") {
+        return res.status(409).json({
+          success: false,
+          message: "This trade belongs to a finished challenge and can't be deleted.",
+        });
+      }
+    }
+
     const deletedTrade = await Trade.findOneAndDelete({
       _id: id,
       user: req.user,
     });
 
-    if (!deletedTrade) {
-      return res.status(404).json({
-        success: false,
-        message: "Trade not found",
-      });
+    // Removing a trade moves the challenge balance - re-check the
+    // result (it can drop to 0 or fall back below the target)
+    if (deletedTrade && deletedTrade.challenge) {
+      const challenge = await challengeModel.findById(deletedTrade.challenge);
+      if (challenge) {
+        await evaluateChallenge(challenge);
+      }
     }
 
     res.status(200).json({

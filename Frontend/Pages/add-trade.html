@@ -118,6 +118,19 @@
         </select>
       </div>
 
+      <!-- Challenge link: add-trade.js only reveals this when
+           the trader has an active challenge, and defaults to it. -->
+      <div id="challengeField" class="mt-5 hidden">
+        <label for="challengeId" class="block text-sm text-gray-400 mb-2">
+          Challenge
+        </label>
+        <select id="challengeId" name="challengeId"
+          class="w-full bg-[#0b0b0b] border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-orange-500 transition">
+          <option value="">Not part of a challenge</option>
+        </select>
+        <p id="challengeHint" class="mt-2 text-xs text-orange-400"></p>
+      </div>
+
       <!-- Session, Setup & Psychology Quick-Tags -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
         <div>

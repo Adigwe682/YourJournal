@@ -145,6 +145,34 @@
 
         <div class="hidden sm:block h-8 w-px bg-white/10"></div>
 
+        <!-- Challenge phase -->
+        <a href="./challenge.html"
+          class="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-semibold whitespace-nowrap rounded-full border border-white/10 bg-white/5 text-gray-300 hover:border-orange-500/50 hover:text-orange-400 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="6" />
+            <circle cx="12" cy="12" r="2" />
+          </svg>
+          <span class="hidden sm:inline">Challenge</span>
+        </a>
+
+        <div class="hidden sm:block h-8 w-px bg-white/10"></div>
+
+        <!-- Admin panel: revealed by app.js only for role "admin".
+             Starts hidden so non-admins never see it flash in. -->
+        <a href="./admindashboard.html" id="adminDashboardButton"
+          style="display: none;"
+          class="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-semibold whitespace-nowrap rounded-full border border-orange-500/40 bg-orange-500/10 text-orange-400 hover:bg-orange-500 hover:border-orange-500 hover:text-black transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <span class="hidden sm:inline">Admin</span>
+        </a>
+
+        <div class="hidden sm:block h-8 w-px bg-white/10"></div>
+
         <!-- Logout -->
         <button id="logoutButton"
           class="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-semibold whitespace-nowrap rounded-full border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500 hover:border-red-500 hover:text-white transition">

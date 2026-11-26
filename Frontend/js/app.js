@@ -1714,3 +1714,60 @@ if (logoutButton) {
     window.location.href = "./login.html";
   });
 }
+
+// ========================================
+// ADMIN PANEL BUTTON
+// ----------------------------------------
+// Only role "admin" should see a link to the admin dashboard, and
+// the check is merely cosmetic - adminMiddleware on the server is
+// what actually enforces access.
+//
+// localStorage can be stale (role changed after login), so if it
+// doesn't say admin we ask the server before giving up. That way a
+// freshly promoted account sees the button without logging in again.
+// ========================================
+
+function revealAdminButton() {
+  const button = document.querySelector("#adminDashboardButton");
+
+  // Inline style beats the Tailwind display classes, so set it
+  // explicitly instead of toggling a `hidden` utility.
+  if (button) {
+    button.style.display = "flex";
+  }
+}
+
+async function syncAdminButton() {
+  const button = document.querySelector("#adminDashboardButton");
+
+  if (!button || !token) return;
+
+  if (user && user.role === "admin") {
+    revealAdminButton();
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/admin/dashboard`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // 401 = session gone (handled elsewhere), 403 = not an admin.
+    if (!response.ok) return;
+
+    user = { ...(user || {}), role: "admin" };
+
+    try {
+      localStorage.setItem("user", JSON.stringify(user));
+    } catch {
+      // private mode / storage full - button still shows this load
+    }
+
+    revealAdminButton();
+  } catch {
+    // Network hiccup: leave it hidden. The server still enforces access.
+  }
+}
+
+syncAdminButton();

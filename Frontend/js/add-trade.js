@@ -47,7 +47,12 @@ if (tradeForm) {
       }
 
       if (response.ok && data && data.success) {
-        window.location.href = "./dashboard.html";
+        // A trade linked to a challenge jumps straight to the
+        // challenge page so the updated balance is visible.
+        const linkedChallenge = formData.get("challengeId");
+        window.location.href = linkedChallenge
+          ? "./challenge.html"
+          : "./dashboard.html";
       } else if (data && data.message) {
         alert(data.message);
       } else {
@@ -186,3 +191,64 @@ document.addEventListener("paste", (event) => {
 
   showImagePreview(file);
 });
+
+// ========================================
+// CHALLENGE SELECTOR
+// ----------------------------------------
+// If the trader has an active challenge, offer it on this form
+// and default to it, so each logged P&L is added to / deducted
+// from the challenge balance automatically. Hidden entirely when
+// there is no active challenge.
+// ========================================
+
+const challengeFmt = (n) =>
+  Number(n || 0).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+async function loadChallengeSelector() {
+  const authToken = localStorage.getItem("token");
+  const field = document.querySelector("#challengeField");
+  const select = document.querySelector("#challengeId");
+  const hint = document.querySelector("#challengeHint");
+
+  if (!authToken || !field || !select) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/challenges`, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+
+    if (!response.ok) return;
+
+    let payload = null;
+    try {
+      payload = await response.json();
+    } catch {
+      payload = null;
+    }
+
+    const active = (payload?.data || []).find((c) => c.status === "active");
+    if (!active) return;
+
+    const option = document.createElement("option");
+    option.value = active._id;
+    option.textContent =
+      `${challengeFmt(active.startAmount)} → ${challengeFmt(active.targetBalance)}` +
+      ` (${active.daysLeft} day${active.daysLeft === 1 ? "" : "s"} left)`;
+    select.appendChild(option);
+    select.value = active._id;
+
+    if (hint) {
+      hint.textContent =
+        "This trade counts toward your active challenge — its P&L updates the challenge balance.";
+    }
+
+    field.classList.remove("hidden");
+  } catch {
+    // Challenge list unavailable: trade simply won't be linked
+  }
+}
+
+loadChallengeSelector();

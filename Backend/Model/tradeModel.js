@@ -51,6 +51,13 @@ const tradeSchema = new mongoose.Schema(
         image: {
             type: String,
         },
+        // Optional: links this trade to a challenge so its P&L
+        // counts toward that challenge's running balance.
+        challenge: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Challenge",
+            default: null,
+        },
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",

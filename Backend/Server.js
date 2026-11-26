@@ -7,6 +7,7 @@ import tradeRoute from "../Backend/Routes/tradeRoute.js";
 import userRoute from "../Backend/Routes/userRoute.js";
 import reportRoutes from "./Routes/reportRoutes.js";
 import adminRoute from "./Routes/adminRoute.js";
+import challengeRoute from "./Routes/challengeRoute.js";
 import sanitizeInput from "./Middleware/sanitize.js";
 import errorHandler from "./Middleware/errorHandler.js";
 import { generalLimiter } from "./Middleware/rateLimiter.js";
@@ -41,6 +42,7 @@ app.use("/users", userRoute);
 app.use("/api/trades", tradeRoute);
 app.use("/api/reports", reportRoutes);
 app.use("/api/admin", adminRoute);
+app.use("/api/challenges", challengeRoute);
 
 // Unknown route -> JSON, never an HTML page the frontend can't parse
 app.use((req, res) => {
