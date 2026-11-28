@@ -15,6 +15,20 @@ if (tradeForm) {
       return;
     }
 
+    // Rules gate: every personal rule must be ticked before a
+    // trade can be saved. Inline hint + scroll, no alert spam.
+    if (rulesGate && !rulesGate.classList.contains("hidden")) {
+      const boxes = rulesGateList.querySelectorAll('input[type="checkbox"]');
+      const allChecked =
+        boxes.length > 0 && Array.from(boxes).every((box) => box.checked);
+
+      if (!allChecked) {
+        rulesGateHint.classList.remove("hidden");
+        rulesGate.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+    }
+
     const formData = new FormData(tradeForm);
 
     if (submitButton) {
@@ -252,3 +266,130 @@ async function loadChallengeSelector() {
 }
 
 loadChallengeSelector();
+
+// ========================================
+// RULES GATE
+// ----------------------------------------
+// The trader's personal rules must all be ticked before a
+// trade can be saved. If the rules API is unreachable the
+// gate stays hidden - a network hiccup should never lock
+// someone out of their own journal.
+// ========================================
+
+const rulesGate = document.querySelector("#rulesGate");
+const rulesGateList = document.querySelector("#rulesGateList");
+const rulesProgress = document.querySelector("#rulesProgress");
+const rulesGateHint = document.querySelector("#rulesGateHint");
+const ruleLightbox = document.querySelector("#ruleLightbox");
+const ruleLightboxImg = document.querySelector("#ruleLightboxImg");
+
+let gateRules = [];
+
+const ruleEsc = (value) =>
+  String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+
+function updateRulesProgress() {
+  if (!rulesGate || rulesGate.classList.contains("hidden")) return;
+
+  const boxes = rulesGateList.querySelectorAll('input[type="checkbox"]');
+  const checked = Array.from(boxes).filter((box) => box.checked).length;
+
+  rulesProgress.textContent = `${checked} of ${boxes.length} confirmed`;
+
+  if (checked === boxes.length) {
+    rulesGateHint.classList.add("hidden");
+  }
+}
+
+function renderRulesGate() {
+  rulesGateList.innerHTML = "";
+
+  gateRules.forEach((rule, index) => {
+    const li = document.createElement("li");
+    li.className = "flex items-start gap-3";
+    const checkboxId = `ruleCheck${index}`;
+
+    const thumbs = (rule.images || []).length
+      ? `<span class="mt-2 flex flex-wrap gap-2">${rule.images
+          .map(
+            (url) =>
+              `<img src="${ruleEsc(url)}" data-zoom="${ruleEsc(url)}" alt="Rule example"
+                class="h-14 w-14 rounded-lg object-cover border border-white/10 cursor-zoom-in hover:border-orange-500/60 transition">`
+          )
+          .join("")}</span>`
+      : "";
+
+    li.innerHTML = `
+      <input type="checkbox" id="${checkboxId}"
+        class="mt-1 h-5 w-5 shrink-0 rounded border-white/30 bg-[#0b0b0b] text-orange-500 focus:ring-orange-500/60 cursor-pointer">
+      <label for="${checkboxId}" class="min-w-0 flex-1 cursor-pointer">
+        <span class="block text-sm leading-relaxed text-gray-300 whitespace-pre-wrap">${ruleEsc(rule.text)}</span>
+        ${thumbs}
+      </label>`;
+
+    li.querySelectorAll("[data-zoom]").forEach((img) => {
+      img.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        ruleLightboxImg.src = img.dataset.zoom;
+        ruleLightbox.classList.remove("hidden");
+        ruleLightbox.classList.add("flex");
+      });
+    });
+
+    rulesGateList.appendChild(li);
+  });
+
+  rulesGateList.addEventListener("change", updateRulesProgress);
+  updateRulesProgress();
+}
+
+async function loadRulesGate() {
+  const authToken = localStorage.getItem("token");
+  if (!authToken || !rulesGate) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/rules`, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+
+    if (!response.ok) return;
+
+    let payload = null;
+    try {
+      payload = await response.json();
+    } catch {
+      payload = null;
+    }
+
+    gateRules = payload?.data || [];
+    if (gateRules.length === 0) return;
+
+    renderRulesGate();
+    rulesGate.classList.remove("hidden");
+    // The gate was hidden during render, so the initial
+    // "0 of N" progress has to be computed now.
+    updateRulesProgress();
+  } catch {
+    // Leave the gate hidden - never block trading on a network error
+  }
+}
+
+if (ruleLightbox) {
+  const closeRuleLightbox = () => {
+    ruleLightbox.classList.add("hidden");
+    ruleLightbox.classList.remove("flex");
+  };
+
+  ruleLightbox.addEventListener("click", closeRuleLightbox);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeRuleLightbox();
+  });
+}
+
+loadRulesGate();

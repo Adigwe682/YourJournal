@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Rules - YourJournal</title>
+  <link rel="stylesheet" href="../output.css">
+</head>
+
+<body class="bg-[#080808] text-white">
+  <header class="border-b border-white/10 bg-[#0b0b0b]">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="font-bold tracking-wide">
+          Your<span class="text-orange-500">Journal</span>
+        </h1>
+        <p class="text-xs text-gray-500">
+          My Trading Rules
+        </p>
+      </div>
+      <a href="./dashboard.html" class="text-sm text-gray-400 hover:text-white transition">
+        ← Back to Dashboard
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-10">
+
+    <div class="mb-8">
+      <p class="text-sm font-semibold tracking-wider text-orange-500">
+        THE PLAYBOOK
+      </p>
+      <h2 class="mt-2 text-2xl sm:text-3xl font-bold">
+        My Trading Rules
+      </h2>
+      <p class="mt-2 text-sm text-gray-500">
+        The rules you must abide by in every trade — psychological,
+        execution, risk, whatever your brain needs to read. They appear
+        as a checklist every time you log a trade, and attach screenshots
+        of an ideal pattern or context trade as reference.
+      </p>
+    </div>
+
+    <!-- Loading / error -->
+    <div id="loadingState" class="py-10 text-center text-gray-500 text-sm">
+      Loading your rules...
+    </div>
+
+    <div id="errorState" class="hidden py-10 text-center">
+      <p id="errorStateMessage" class="text-gray-400 text-sm">
+        Could not load your rules.
+      </p>
+      <button id="retryButton"
+        class="mt-4 px-5 py-2.5 rounded-xl border border-white/10 text-gray-300 hover:text-white hover:border-white/25 transition text-sm">
+        Try again
+      </button>
+    </div>
+
+    <!-- Add a rule -->
+    <form id="addRuleForm" enctype="multipart/form-data"
+      class="hidden bg-[#111111] border border-white/10 rounded-2xl p-6">
+      <label for="ruleText" class="block text-sm text-gray-400 mb-2">
+        New Rule
+      </label>
+      <textarea id="ruleText" name="text" rows="3" maxlength="600" required
+        placeholder="e.g. When trading context or pattern — on confirmation entry model or aggressive model — you must risk the full setup SL."
+        class="w-full bg-[#0b0b0b] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none focus:border-orange-500 transition resize-none"></textarea>
+
+      <label for="ruleImages" class="block text-sm text-gray-400 mt-4 mb-2">
+        Ideal Pattern / Context Examples (optional)
+      </label>
+      <input id="ruleImages" name="images" type="file" accept="image/*" multiple
+        class="w-full bg-[#0b0b0b] border border-white/10 rounded-xl px-4 py-3 text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-black hover:file:bg-orange-400 outline-none transition cursor-pointer">
+      <p class="mt-2 text-xs text-gray-500">
+        Screenshots of what a perfect example looks like. Up to 6 images,
+        10 MB each — or paste them with <span class="font-mono text-white">Ctrl+V</span>.
+      </p>
+
+      <!-- Preview strip for chosen / pasted images -->
+      <div id="rulePreview" class="hidden mt-3 flex flex-wrap gap-3"></div>
+
+      <div class="mt-5 flex items-center justify-end">
+        <button type="submit" id="addRuleButton"
+          class="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-400 text-black font-bold transition">
+          Save Rule
+        </button>
+      </div>
+    </form>
+
+    <!-- Rules list -->
+    <ul id="rulesList" class="hidden mt-6 space-y-4"></ul>
+
+    <p id="emptyState" class="hidden rounded-xl border border-dashed border-white/10 bg-[#101010] p-8 text-center text-sm text-gray-400">
+      No rules yet. Write your first one above — it will block every
+      trade you try to save until you confirm it.
+    </p>
+
+  </main>
+
+  <!-- Full-screen image viewer -->
+  <div id="ruleLightbox" class="hidden fixed inset-0 z-50 bg-black/90 items-center justify-center p-4 cursor-zoom-out">
+    <img id="ruleLightboxImg" alt="Rule example" class="max-h-[90vh] max-w-[95vw] rounded-lg object-contain">
+  </div>
+
+  <script src="../js/api-config.js"></script>
+  <script src="../js/rules.js"></script>
+</body>
+
+</html>
